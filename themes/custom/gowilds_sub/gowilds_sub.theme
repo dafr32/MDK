@@ -1,0 +1,301 @@
+<?php
+
+use Drupal\Core\Template\Attribute;
+use Drupal\user\UserInterface;
+use Drupal\Core\Url;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
+
+$theme_path = \Drupal::service('extension.list.theme')->getPath('gowilds_sub');
+include_once $theme_path . '/includes/menu.php';
+
+
+/**
+ * Sprawdza, czy użytkownik jest zalogowany i czy ma rolę 'editor'.
+ *
+ * @return bool
+ *   Zwraca TRUE, jeśli użytkownik jest zalogowany i ma rolę 'editor', FALSE w przeciwnym razie.
+ */
+
+function check_user_role_editor() {
+  // Pobierz aktualnego użytkownika.
+  $current_user = \Drupal::currentUser();
+  // Sprawdź, czy użytkownik jest zalogowany.
+  if ($current_user->isAuthenticated()) {    
+    // Sprawdź, czy użytkownik ma rolę 'editor'.
+    return TRUE;
+  }
+  
+  // Jeśli użytkownik nie jest zalogowany, zwróć FALSE.
+  return FALSE;
+}
+
+
+
+function gowilds_sub_preprocess_page(&$variables) {
+    
+  // Sprawdź, czy aktualna strona to "/zajecia".
+  
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('gowilds_sub');
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  $current_path = \Drupal::service('path.current')->getPath();  
+
+  $path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);  
+  $variables['is_zajecia_page'] = ($current_path == '/zajecia');    
+  if (substr( $path_alias,0,4) == '/dk/')
+    $variables['strona_dk'] = true;
+  else
+    $variables['strona_dk'] = false;  
+ 
+  $header_skin = $theme_path . '/templates/page/header.html.twig';
+
+  // Drupal::logger('skin')->notice('theme name: ' .  $header_skin );
+  $variables['theme_path'] = $theme_path;
+  $variables['header_skin'] = $header_skin;
+  
+  $color_text = "#eee";
+
+  $variables['kolor_kategorii'] = '';
+  $variables['bg_menu'] = "#000";
+  $variables['bg_menu_text'] = "#eee";
+ 
+  if ( isset($variables['node']) ){
+    $node = $variables['node']; 
+    // Drupal::logger('node')->notice('theme name: ');
+    if ($node->hasField('field_osrodek')) {
+      $referenced_entity = $variables['node']->field_osrodek->entity;
+      // Sprawdź, czy referencja nie jest pusta i czy jest typu osrodek_kultury.
+      if (!empty($referenced_entity) && $referenced_entity->bundle() == 'osrodek_kultury') {        
+        $kolor = $referenced_entity->get('field_kolor')->value;   
+        $kolor2 = $referenced_entity->get('field_kolor2')->value;   
+        $color_text = $referenced_entity->get('field_tekst')->value; 
+      }
+      
+      $variables['kolor_kategorii'] = $kolor;
+      $variables['kolor_tla'] = $kolor2;
+      $variables['bg_menu'] = $kolor;
+      $variables['bg_menu_text'] = $color_text;      
+    }
+
+  }
+
+  $current_user = \Drupal::currentUser();
+  
+  if ($current_user->isAuthenticated()) {
+    // Ustaw zmienną w sesji, jeśli użytkownik jest zalogowany.
+    \Drupal::service('session')->set('user_login', TRUE);
+  } else {
+    // Ustaw zmienną w sesji, jeśli użytkownik nie jest zalogowany.
+    \Drupal::service('session')->set('user_login', FALSE);
+  }
+
+  // Odczytaj wartość zmiennej z sesji.
+  $is_logged_in = \Drupal::service('session')->get('user_login');
+  
+  // Dodaj komunikat do systemu do debugowania.
+  // \Drupal::messenger()->addMessage('User logged in: ' . ($is_logged_in ? 'TRUE' : 'FALSE'));
+
+  // Przekaż wartość do szablonu Twig.
+  $variables['is_logged_in'] = $is_logged_in;
+
+ 
+  // Drupal::logger('kolor text:')->notice('col: ' .$variables['bg_menu_text'] ); 
+
+
+
+}
+
+
+function gowilds_sub_preprocess_html(&$variables) {
+  $variables['#attached']['library'][] = 'gowilds_sub/gowilds_sub.skin.default';
+}
+
+
+use Drupal\Core\Utility\UrlHelper;
+
+/**
+ * Implements hook_preprocess_node() for node templates.
+ */
+function gowilds_sub_preprocess_node(&$variables) {
+  
+  // kolory ośrodka
+  $node = $variables['node'];   
+  if ($node->hasField('field_osrodek')) {
+    $referenced_entity = $variables['node']->field_osrodek->entity;      
+    if (!empty($referenced_entity) && $referenced_entity->bundle() == 'osrodek_kultury') {        
+      $kolor = $referenced_entity->get('field_kolor')->value;  
+      $kolor2 = $referenced_entity->get('field_kolor2')->value;    
+      $color_text = $referenced_entity->get('field_tekst')->value; 
+
+      $variables['kolor_kategorii'] = $kolor;
+      $variables['kolor_tla'] = $kolor2;
+      $variables['bg_menu'] = $kolor;
+      $variables['bg_menu_text'] = $color_text;
+    }                  
+  }
+    
+}
+
+
+function gowilds_sub_preprocess_node__kontakt(&$variables) {
+  $node = $variables['node'];
+  $listing_video = '';
+  if($node->hasField('field_listing_video')){        
+      try{
+          $field_listing_video = $node->get('field_listing_video');
+          
+          if(isset($field_listing_video->value) && $field_listing_video->value){                                  
+              $autoembed = new AutoEmbed();
+              $listing_video = $autoembed->parse($field_listing_video->value);                
+          }else{
+              $listing_video = '';
+          }
+      }
+      catch(Exception $e){
+      }
+  }
+  $variables['listing_video'] = $listing_video;    
+}
+
+
+function gowilds_sub_preprocess_node__zajecia(&$variables) {
+    $node = $variables['node'];
+    $listing_video = '';
+    if($node->hasField('field_listing_video')){
+       try{
+            $field_listing_video = $node->get('field_listing_video');
+            if(isset($field_listing_video->value) && $field_listing_video->value){
+                // Drupal::logger('zaj:')->notice($field_listing_video->value);
+                $autoembed = new AutoEmbed();
+                $listing_video = $autoembed->parse($field_listing_video->value);
+                // Drupal::logger('zaj: ')->notice('parse:' . $listing_video);
+            }else{
+               $listing_video = '';
+            }
+          }
+        catch(Exception $e){
+       }
+    }
+    $variables['listing_video'] = $listing_video;
+
+    $view_mode = $variables['view_mode']; 
+    $allowed_view_modes = ['full']; 
+    if(in_array($view_mode, $allowed_view_modes)) {
+       $allowed_regions = ['listing_sidebar'];
+       gowilds_add_regions_to_node($allowed_regions, $variables);
+    }
+    // Drupal::logger('zaj')->notice('video: ' .$variables['listing_video']);
+}
+
+
+// function gowilds_sub_render_block($key) {
+//   $block = \Drupal\block\Entity\Block::load($key);
+//   if($block){
+//   $block_content = \Drupal::entityTypeManager()
+//     ->getViewBuilder('block')
+//     ->view($block);
+//     return \Drupal::service('renderer')->render($block_content);
+//   }  
+//   return '';
+// }
+
+
+
+/**
+ * Implements template_preprocess_HOOK() for block templates.
+ */
+function gowilds_sub_preprocess_mimemail_message(array &$variables) {   
+    global $base_url; 
+    // Drupal::logger('form mail')->notice('current_display: ' . $form_id);    
+    $theme_path = \Drupal::service('extension.list.theme')->getPath('gowilds_sub');
+    $css_file_path = $base_url . '/' . $theme_path . '/css/mail.css';
+    $variables['css_file'] = file_get_contents($css_file_path);
+  }
+
+/**
+ * Implements hook_form_alter().
+ * Modyfikacja przekierowania filtra ze strony głównej
+ */
+
+// function gowilds_sub_form_views_exposed_form_alter(array &$form) {
+
+//     global $base_url;   
+
+//     $listing_search_action = '/zajecia'; //nazwa strony do wyświetlenie
+//     switch ($form['#id']) {
+//       // ID formularza 
+//       case 'views-exposed-form-listing-content-listing-filter-form':
+//           $form['#action'] = $listing_search_action;
+//           break;
+//     }
+// }
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+// function gowilds_sub_preprocess_taxonomy_term(&$variables) {
+//   $term = $variables['term'];
+//   $field_kolor = field_get_items('taxonomy_term', $term, 'field_kolor');
+//   $field_kolor2 = field_get_items('taxonomy_term', $term, 'field_kolor2');
+
+//   if (!empty($field_kolor)) {
+//     $variables['kolor'] = $field_kolor[0]['value'];
+//   }
+//   else {
+//     $variables['kolor'] = NULL;
+//   }
+
+//   if (!empty($field_kolor2)) {
+//     $variables['kolor2'] = $field_kolor2[0]['value'];
+//   }
+//   else {
+//     $variables['kolor2'] = NULL;
+//   }
+  
+// }
+
+
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+
+/**
+ * Implementuje hook_preprocess_HOOK() dla szablonów terminów taksonomii.
+ * Dodaje zmienne odczytojące kolory z kategorii ośrodki
+ */
+function gowilds_sub_preprocess_taxonomy_term(&$variables) {
+  $term = $variables['term'];
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+
+  // Pobierz definicje przechowywania pól za pomocą EntityFieldManager.
+  $field_kolor = $entity_field_manager->getFieldStorageDefinitions('taxonomy_term')['field_kolor'];
+  $field_kolor2 = $entity_field_manager->getFieldStorageDefinitions('taxonomy_term')['field_kolor2'];  
+
+  // Pobierz wartości pól bezpośrednio z obiektu terminu używając EntityFieldManager.
+  $field_kolor_value = $term->get($field_kolor->getName())->value;
+  $field_kolor2_value = $term->get($field_kolor2->getName())->value;
+
+  $variables['kolor'] = !empty($field_kolor_value) ? $field_kolor_value : NULL;
+  $variables['kolor2'] = !empty($field_kolor2_value) ? $field_kolor2_value : NULL;
+
+  Drupal::logger('kolor:')->notice('current_display: ' . $variables['kolor']); 
+}
+
+
+/** 
+ * Implements template_preprocess_HOOK() for views-view.html.twig.
+ */
+
+// Zmiana ilości elementów w widoku aktualności
+function gowilds_sub_preprocess_views_view(array &$variables) {  
+  //Drupal::logger('my_module')->notice('current_display: ' . $variables['view']->id() );
+  if ($variables['view']->id() == 'kalendarz' && $variables['display_id'] == 'all_events') {        
+    $variables['my_number_events'] = theme_get_setting('events_list_field'); 
+  }
+  
+}
+
+
+
+

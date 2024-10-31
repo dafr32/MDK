@@ -1,0 +1,134 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+    'mb-5'
+  ]
+%}
+
+{% set formatted_date = node.getCreatedTime()|date('j F Y')|replace({
+              'January': 'stycznia', 'February': 'lutego', 'March': 'marca', 'April': 'kwietnia',
+              'May': 'maja', 'June': 'czerwca', 'July': 'lipca', 'August': 'sierpnia',
+              'September': 'września', 'October': 'października', 'November': 'listopada',
+              'December': 'grudnia'
+            }) %}
+
+{% if content.field_osrodek['#object'].field_osrodek.entity %}
+    {# Pobierz kolor z powiązanej kategorii "osrodek" #}
+    {% set kolor = content.field_osrodek['#object'].field_osrodek.entity.field_kolor.value %}
+{% endif %}
+
+{% if view_mode == 'frontpage' %} 
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        {# <div class="post">{{ content.field_wstep }}</div> #}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% elseif view_mode == 'teaser' %} 
+<!-- Article Teaser -->
+<div class="">
+    <div class="card h-100 border-0 shadow-sm">
+        
+        <!-- Post Image -->
+{# <a href="{{ url }}" class="card-img-top d-block overflow-hidden">
+    {{ content.field_image }}
+</a> #}
+
+
+        <!-- Card Body -->
+        <div class="card-body d-flex flex-column">
+            
+            <!-- Post Title -->
+            <h5 class="card-title mb-3">
+                <a href="{{ url }}" class="text-dark text-decoration-none">{{ label }}</a>
+            </h5>
+            
+            <!-- Read More Button -->
+            <div class="mt-auto">
+                <a href="{{ url }}" class="btn btn-outline-primary btn-sm" style="background: {{ kolor }} !important;">Czytaj więcej <i class="las la-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elseif view_mode == 'sidebar' %} 
+  <div class="granty-sidebar row">
+     <div class="col post-image">{{ content.field_image }} </div>
+     <h3 class="col post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>   
+  </div>
+
+{% else %}
+<!-- granty mode -->
+
+<article{{ attributes.addClass(classes)|without('about') }}>
+  <div class="container-fluid py-4">
+
+    {# Nagłówek z większym tytułem na pełnej szerokości #}
+    <header class="text-center mb-4">
+      <h1{{ title_attributes.addClass('node__title', 'display-4', 'fw-bold', 'post-title') }}>
+        {{ label }}
+      </h1>
+      <hr class="w-50 mx-auto my-3">
+    </header>
+
+    {# Obrazek wyśrodkowany na pełnej szerokości z cieniem #}
+    <div class="post-thumbnail post-{{ post_format }} text-center mb-5">
+      <div class="border rounded shadow-sm overflow-hidden mx-auto" style="max-width: 100%;">
+        {{ content.field_image }}
+      </div>
+    </div>
+
+    {# Główna zawartość artykułu, wyśrodkowana na pełnej szerokości strony #}
+    <div{{ content_attributes.addClass('node__content', 'px-4', 'py-3') }}>
+      {{ content | without('field_osrodek', 'field_image') }}
+    </div>
+
+    {# Wyróżnione pole z ośrodkiem, wyśrodkowane poniżej głównej treści #}
+    {# <div class="d-flex justify-content-center">
+      <div class="my-5 px-4 py-2 text-center rounded-3" style="background-color:{{ kolor }}; color: #fff;">
+        {{ content.field_osrodek }}
+      </div>
+    </div> #}
+
+  </div>
+</article>
+
+
+
+
+
+
+{# <article{{ attributes.addClass(classes)|without('about') }}>
+  <header>   
+      <h2{{ title_attributes.addClass('node__title') }}>
+        {{ label }}
+      </h2>    
+  </header>
+    <div class="post-thumbnail post-{{ post_format }} align-center">
+      {{ content.field_image}} 
+    </div>
+  <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+    {{ content | without('field_osrodek', 'field_image') }}
+  </div>
+  <div style="position:relative">
+      <div class="my-5 px-3 text-left" style="background-color:{{kolor}}; color:#fff">  {{ content.field_osrodek }} </div>
+  </div>  
+  <hr> 
+</article> #}
+{% endif %}

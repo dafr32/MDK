@@ -1,0 +1,111 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+{% if content.field_osrodek['#object'].field_osrodek.entity %}
+    {# Pobierz kolor z powiązanej kategorii "osrodek" #}
+    {% set kolor = content.field_osrodek['#object'].field_osrodek.entity.field_kolor.value %}
+{% endif %}
+
+{% if view_mode == 'teaser' %} 
+<!-- Article Teaser -->
+<div class="gadzetyCard">
+    <div class="cardGadzety">
+<div class="text-center">
+    <!-- Obrazek 1:1 -->
+    <div class="card-img-top">
+        <a href="{{ url }}">
+            {{ content.field_image }}
+        </a>
+    </div>
+
+    <!-- Tytuł -->
+    <a href="{{ url }}">
+    <div>
+        <h5 class="card-title">{{ label }}</h5>
+    </div>
+
+    <!-- Kategoria -->
+    <div class="card-footer" style="border-top: 0;">
+        <span class="badge" style="color: black;">Czytaj więcej<i class="las la-arrow-right"></i></span>
+    </div>
+    </a>
+</div>
+</div>
+</div>
+
+
+{% else %}
+<div class="container-fluid p-5 bg-light">
+  <div class="row align-items-center">
+    <div class="col-lg-3">
+      {# Pole obrazu (field_image) - pełna szerokość w mobilnym, połowa w desktop #}
+      <div class="product-image text-center mb-4 mb-lg-0 align-center">
+        {% if node.field_galeria_zdjec_max_3 is not empty %}        
+          {{ content.field_galeria_zdjec_max_3 }}
+        {% else %}        
+          {{ content.field_image }}
+        {% endif %}      
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="product-details px-3">
+        {# Pole opisu przedmiotu (field_opis_przedmiotu) - tekst po lewej stronie #}
+        <h2 class="display-4">{{ label }}</h2>
+        <p class="lead">{{ node.field_opis_przedmiotu.value }}</p>
+
+        {# Pole cena (field_cena) i ośrodek (field_osrodek) obok siebie #}
+        <div class="product-info d-flex align-items-center flex-column flex-sm-row mt-4">
+          <div class="product-price h6 text-success mb-2 mb-sm-0">
+            Cena: {{ content.field_cena }}
+          </div>
+          <div class="product-location h6 ms-sm-auto" style="background-color: {{ kolor }}; padding: 8px; border-radius: 10px; color: white;">
+          {{ content.field_osrodek }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+</div>
+
+
+
+
+{# <article{{ attributes.addClass(classes)|without('about') }}>
+  <header>
+    {{ title_prefix }}
+    {% if not page %}
+      <h2{{ title_attributes.addClass('node__title') }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+    {% endif %}
+    {% set title_suffix = '' %}
+    {{ title_suffix }}
+    {# {% if display_submitted %}
+      <div class="node__meta">
+        {{ author_picture }}
+        <span{{ author_attributes }}>
+          {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        </span>
+        {{ metadata }}
+      </div>
+    {% endif %}
+  </header>
+  <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+    {{ content }}
+  </div>
+</article> #}
+{% endif %}

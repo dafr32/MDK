@@ -1,0 +1,51 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+    'ogloszenia',
+  ]
+%}
+
+{% if view_mode == 'teaser' %} 
+<div class="post-block teaser-2">
+    <div class="content-wrap">
+      <div class="post-content">
+          <div class="post-meta">            
+            <div class="content-inner d-flex">
+                <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div>
+                <div class="date" style="color: {{ kolor }}">{{ node.getCreatedTime()|date('U')|format_date('my_date') }}</div>              
+              {# <span class="post-author"><i class="fas fa-user-circle"></i>{{ author_name }}</span> #}
+              {# <span class="post-comment"><i class="fas fa-comments"></i>{{ comment_count }} {{ 'Comments'|t }}</span> #}
+            </div>
+          </div>
+          <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+          <div class="post">{{ content.field_wstep }}</div>   
+          <a class="read-more" style="color: {{ kolor }}" href="{{ url }}">
+            <span>{{ 'Czytaj więcej'|t }}</span>
+            <i class="las la-arrow-right"></i>
+          </a>      
+      </div>
+      <div class="post-image">
+        {{ content.field_image }}
+        {# <div class="post-created" style="background: {{kolor}}"> 
+          <span class="day">{{ node.getCreatedTime()|date("d") }}</span>
+          <span class="month">{{ node.getCreatedTime()|date("M") }}</span>
+        </div> #}
+      </div>
+    </div>
+</div>
+
+{% else %}
+<!-- ogloszenie test -->
+<article{{ attributes.addClass(classes)|without('about') }}>
+  <div{{ content_attributes.addClass('node__content', 'clearfix', '') }}>
+  <p>WAŻNY KOMUNIKAT!</p>
+    {{ content }}
+  </div>
+</article>
+{% endif %}

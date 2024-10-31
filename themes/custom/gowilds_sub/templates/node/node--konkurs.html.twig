@@ -1,0 +1,95 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+    'konkurs konkurs-full',
+  ]
+%}
+
+{% if content.field_osrodek['#object'].field_osrodek.entity %}
+    {# Pobierz kolor z powiązanej kategorii "osrodek" #}
+    {% set kolor = content.field_osrodek['#object'].field_osrodek.entity.field_kolor.value %}
+{% endif %}
+
+
+{% if view_mode == 'teaser' %} 
+  <div class="konkurs konkurs-teaser">
+    <div class="konkurs-image">
+      {{ content.field_image}}
+    </div>
+    <div class="content">
+      <div class="organizator"> {{ content.field_osrodek }}</div>
+      <h2{{ title_attributes.addClass('node__title') }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+
+       <h5 class="title">Termin</h5>
+      <div class="termin"> {{ content.field_termin }}</div>
+{#
+      {% if node.field_termin_opis is not empty %}
+        <h5 class="title">Uwagi</h5>
+        <div class="termin"> {{ content.field_termin_opis }}</div>
+      {% endif %} #}
+
+    </div>
+     
+  </div>
+
+{% elseif view_mode == 'frontpage' %} 
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        <div class="post">{{ content.field_wstep }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<!-- article mode -->
+  <article {{ attributes.addClass(classes) }} >
+  <h2 class="post-title">{{ label }} </h2>
+    <div class="post-thumbnail post-{{ post_format }} align-center">
+      {{ content.field_image}} 
+    </div>
+
+    <div class="konkurs-content">
+      <h5 class="title">Termin</h5>
+      <div class="termin"> {{ content.field_termin }}</div>
+      <h5 class="title">Organizator</h5>
+      <div class="organizator"> {{ content.field_osrodek }}</div>
+
+      <h5 class="title">Uczestnicy</h5>
+      <div class="uczestnicy"> {{ content.field_uczestnicy }}</div>
+
+      <h5 class="title">Zasady konkursu</h5>
+      <div class="zasady"> {{ content.body }}</div>
+
+      {% if node.field_termin_opis is not empty %}
+        <h5 class="title">Uwagi</h5>
+        <div class="termin"> {{ content.field_termin_opis }}</div>
+      {% endif %}
+    </div>
+
+    {% if node.field_zalaczniki and node.field_zalaczniki.value is not empty %}
+        <div class="attachments border-top">
+            <h5>Załączniki:</h5>
+            {{ content.field_zalaczniki }}
+        </div>
+    {% endif %}
+
+  <div class="mt-4 w-100 text-end"> {{ content.addtoany }} </div>
+   
+</article>
+{% endif %}

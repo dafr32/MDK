@@ -1,0 +1,143 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+{% set formatted_date = node.getCreatedTime()|date('j F Y')|replace({
+              'January': 'stycznia', 'February': 'lutego', 'March': 'marca', 'April': 'kwietnia',
+              'May': 'maja', 'June': 'czerwca', 'July': 'lipca', 'August': 'sierpnia',
+              'September': 'września', 'October': 'października', 'November': 'listopada',
+              'December': 'grudnia'
+            }) %}
+
+{% if view_mode == 'teaser' %} 
+<div class="post-block teaser-2">
+    <div class="content-wrap">
+      <div class="post-content">
+          <div class="post-meta">            
+            <div class="content-inner d-flex">
+                <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div>
+                {# <div class="date" style="color: {{ kolor }}">{{ formatted_date }}</div>               #}
+              {# <span class="post-author"><i class="fas fa-user-circle"></i>{{ author_name }}</span> #}
+              {# <span class="post-comment"><i class="fas fa-comments"></i>{{ comment_count }} {{ 'Comments'|t }}</span> #}
+            </div>
+          </div>
+          <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+          <div class="post">{{ content.field_wstep }}</div>   
+          <a class="read-more" style="color: {{ kolor }}" href="{{ url }}">
+            <span>{{ 'Czytaj więcej'|t }}</span>
+            <i class="las la-arrow-right"></i>
+          </a>      
+      </div>
+      <div class="post-image">
+        {{ content.field_image }}
+        {# <div class="post-created" style="background: {{kolor}}"> 
+          <span class="day">{{ node.getCreatedTime()|date("d") }}</span>
+          <span class="month">{{ node.getCreatedTime()|date("M") }}</span>
+        </div> #}
+      </div>
+    </div>
+</div>
+
+{% else %}
+
+<article{{ attributes.addClass(classes)|without('about') }}>
+     <div class="post-block">    
+        {{ title_prefix }}
+            <h1{{ title_attributes.addClass('post-title') }}>{{ label }}</h1>
+        {{ title_suffix }}  
+        <div class="post-meta d-flex align-items-center justify-content-between">
+          {# <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div> #}
+          {# <div class="post-author">
+            <i class="fas fa-calendar"></i>{{ node.getCreatedTime()|date('U')|format_date('my_date') }}
+          </div> #}
+          {# <div class="px-3">  {{ content.field_osrodek }} </div> #}
+        </div>  
+    </div>
+
+
+    <div class="post-thumbnail post-{{ post_format }} align-center">
+        {% if post_format == 'video' or post_format == 'audio' and gva_iframe %}
+        {{ gva_iframe|raw }}
+        {% elseif post_format == 'gallery' and content.field_post_gallery %}
+        {{ content.field_post_gallery }}
+        {% else %}
+        {{ content.field_image }}
+        {% endif %}  
+    </div>
+
+    <div class="row justify-content-center mb-2">
+      <div class="col-12">
+        <div>
+          <p>{{ content.field_opis }}</p>
+        </div>
+      </div>
+    </div>
+
+  {# <a href={{ content.field_odnosnik_zajec.uri }}><div class="row justify-content-center mb-5">
+      <div class="col-12 col-md-6 text-center btn btn-primary">
+        {{ content.field_odnosnik_zajec }}
+      </div>
+    </div></a> #}
+
+<div class="post-thumbnail post-{{ post_format }} align-center">
+            {{ content.field_gallery_image }}
+</div>
+
+    {% if node.field_zalaczniki and node.field_zalaczniki.value is not empty %}
+      <div class="attachments border-top">
+          <h5>Załączniki:</h5>
+          {{ content.field_zalaczniki }}
+      </div>
+    {% endif %}
+</article>
+
+{# <div{{ attributes.addClass(classes, 'fontBasic')|without('about') }}>
+  <div class="container py-5">
+    
+    <header class="mb-5 text-center">
+      <h2 class="post-title">{{ label }}</h2>
+    </header>
+    
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 col-lg-8 text-center">
+        {{ content.field_image }}
+      </div>
+    </div>
+    
+    <div class="row justify-content-center mb-2">
+      <div class="col-12">
+        <div>
+          <p>{{ content.field_opis }}</p>
+        </div>
+      </div>
+    </div>
+
+    <a href={{ content.field_odnosnik_zajec.uri }}><div class="row justify-content-center mb-5">
+      <div class="col-12 col-md-6 text-center btn btn-primary">
+        {{ content.field_odnosnik_zajec }}
+      </div>
+    </div></a>
+
+    <div class="row justify-content-center">
+      <div class="col-12">
+        {% if content.field_gallery_image|render %}
+          <h2 class="h4 text-center mb-4">Galeria zdjęć</h2>
+          <div class="d-flex flex-wrap justify-content-center">
+            {{ content.field_gallery_image }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+  </div>
+</div> #}
+
+{% endif %}

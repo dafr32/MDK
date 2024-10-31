@@ -1,0 +1,27 @@
+{%
+  set classes = [
+    'newsletter',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+<div id="newsletter">  
+  <div id="header" style="border-bottom:1px solid #333; margin-bottom:30px;">
+    <a href="https://mdk.bielsko.pl">      
+      {{ content.field_header }}
+    </a>      
+    <div style="margin:20px 0"> {{ content.body }}</div>    
+  </div>  
+  <hr>
+  <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+    <div class="content-body"> 
+      {{ content | without ('body', 'field_header')}}
+    </div>
+  </div>
+</div>
+

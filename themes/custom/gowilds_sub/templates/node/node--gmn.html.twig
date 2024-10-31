@@ -1,0 +1,55 @@
+{%
+  set classes = [
+    'gmn node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+    'w-1000',
+  ]
+%}
+
+{% if view_mode == 'teaser' %} 
+<div class="gmn post-block teaser-2">
+    <div class="content-wrap">
+      <div class="post-content pt-0">
+          <div class="post-meta">
+            <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>                
+          </div>
+          <div class="post">{{ content.body }}</div>   
+          <a class="read-more" style="color: {{ kolor }}" href="{{ url }}">
+            <span>{{ 'Czytaj więcej'|t }}</span>
+            <i class="las la-arrow-right"></i>
+          </a>      
+      </div>
+      <div class="post-image">
+        {{ content.field_image }}
+        {# <div class="post-created" style="background: {{kolor}}"> 
+          <span class="day">{{ node.getCreatedTime()|date("d") }}</span>
+          <span class="month">{{ node.getCreatedTime()|date("M") }}</span>
+        </div> #}
+      </div>
+    </div>
+</div>
+
+{% else %}
+<article{{ attributes.addClass(classes)|without('about') }} style="max-width: 1000px">
+  <header>
+      <h1{{ title_attributes.addClass('node__title') }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h1>
+      <div class="gmn-image">{{content.field_image}}</div>
+  </header>
+  <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+    {{ content | without ('field_image', 'field_gallery_image')}}
+  </div>
+  {% if content.field_gallery_image is not empty %}
+  <div class="pole_galeria mt-5 align-center mb-5">
+      {{content.field_gallery_image}}
+  </div>
+
+{% endif %}
+</article>
+{% endif %}

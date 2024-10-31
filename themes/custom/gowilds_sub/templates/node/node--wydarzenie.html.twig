@@ -1,0 +1,322 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+
+  {% if content.field_osrodek['#object'].field_osrodek.entity %}
+    {# Pobierz kolor z powiązanej kategorii "osrodek" #}
+    {% set kolor = content.field_osrodek['#object'].field_osrodek.entity.field_kolor.value %}
+  {% endif %}
+
+
+{% set start_date = node.field_event_start_date.value %}
+{% set end_date = node.field_event_end_date.value %}
+{% set start_time  = node.field_event_start_time.value %}
+{% set end_time = node.field_event_end_time.value %}
+
+
+{% set date1 = start_date|date('j F Y') %}
+{% set day_of_week1 = date1|date('l') %}
+
+{% set day_of_week1 = date1|date('l')|replace({
+  'Monday': 'poniedziałek', 'Tuesday': 'wtorek', 'Wednesday': 'środa',
+  'Thursday': 'czwartek', 'Friday': 'piątek', 'Saturday': 'sobota',
+  'Sunday': 'niedziela'
+}) %}
+
+{% if end_date is not empty %}
+  {% set formatted_date2 = end_date|date('j F Y') %}
+  {% set day_of_week2 = end_date|date('l') %} 
+  {% set day_of_week2 = end_date|date('l')|replace({
+    'Monday': 'poniedziałek', 'Tuesday': 'wtorek', 'Wednesday': 'środa',
+    'Thursday': 'czwartek', 'Friday': 'piątek', 'Saturday': 'sobota',
+    'Sunday': 'niedziela'
+  }) %}
+
+{% endif %}
+
+{% set od = "" %}
+{% set _do = "" %}
+{% if end_date is not empty and end_date > start_date %}
+  {% set od = "od " %}
+  {% set _do = "do " %}
+{% endif %}
+
+
+{% if view_mode == 'frontpage' %} 
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        <div class="post">{{ content.field_wstep }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% elseif view_mode == 'teaser' or view_mode == 'slider_wydarzenie' %}
+ <!-- teaser mode  -->
+<article class="event event-teaser" >
+  <div class="row">
+    <div class="col-sm-12 col-md-5">
+      <div class="event-image">
+        {{ content.field_image}}
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-7">
+      <div class="event-content d-flex flex-column h-100">
+        <h2{{ title_attributes.addClass('node__title') }}>
+          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+        </h2>
+        <div class="event-teaser">
+          {{ content.field_wstep }}
+        </div>
+        <div class="footer mt-auto">
+          {# start date  #}          
+            {% set formatted_date1 = start_date|date('j F Y')|replace({
+              'January': 'stycznia', 'February': 'lutego', 'March': 'marca', 'April': 'kwietnia',
+              'May': 'maja', 'June': 'czerwca', 'July': 'lipca', 'August': 'sierpnia',
+              'September': 'września', 'October': 'października', 'November': 'listopada',
+              'December': 'grudnia'
+            }) %}
+            <div class="event-date">
+              {{ od }}
+              <span>{{ formatted_date1 }}</span> {{day_of_week1}} 
+              {% if start_time is not empty %}
+                <span>godz. {{node.field_event_start_time.value|date('G.i','UTC')}}{% if end_time is not empty and (start_date == end_date or end_date is empty) %}
+                - {{ node.field_event_end_time.value|date('G.i', 'UTC')}}{% endif %}</span>
+              {% endif %}
+            </div>
+
+            {% if end_date is not empty and end_date > start_date %}
+              {% set formatted_date2 = end_date|date('j F Y')|replace({
+                'January': 'stycznia', 'February': 'lutego', 'March': 'marca', 'April': 'kwietnia',
+                'May': 'maja', 'June': 'czerwca', 'July': 'lipca', 'August': 'sierpnia',
+                'September': 'września', 'October': 'października', 'November': 'listopada',
+                'December': 'grudnia'
+              }) %}
+              <div class="event-date2">
+                {{ _do }}
+                <span>{{ formatted_date2 }} </span>  {{day_of_week2}} 
+                {% if end_time is not empty %}
+                  <span>
+                  godz. {{ node.field_event_end_time.value|date('G.i', 'UTC') }}
+                  </span>
+                {% endif %}
+              </div>
+            {% endif %}
+
+          {# placowka  #}
+          <div class="osrodek">
+            {{ content.field_osrodek }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% elseif view_mode == 'email_html' %}
+
+<article class="event event-teaser" style="overflow:auto; color:#000" >      
+    <div style="float:left; max-width:40%; margin:20px">
+      {{ content.field_image}}
+    </div>
+    
+    <div >
+      <div class="event-content d-flex flex-column h-100">
+        <p style="margin-bottom:10px"><strong>Wydarzenia</strong><p>
+        <h2{{ title_attributes.addClass('node__title') }}>
+          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+        </h2>
+        <div class="event-teaser">
+          {{ content.field_wstep }}
+        </div>
+        <div class="footer mt-auto">
+          {# start date  #}          
+            <div class="event-date">   
+                {{ od }}                 
+              {% set formatted_date = start_date|date('j F Y') %}
+                <span style="font-weight: bold;">{{ formatted_date|replace({
+                  'January': 'stycznia',
+                  'February': 'lutego',
+                  'March': 'marca',
+                  'April': 'kwietnia',
+                  'May': 'maja',
+                  'June': 'czerwca',
+                  'July': 'lipca',
+                  'August': 'sierpnia',
+                  'September': 'września',
+                  'October': 'października',
+                  'November': 'listopada',
+                  'December': 'grudnia'
+                }) }}</span>              
+              {% if start_time is not empty %}
+                 godz. {{ node.field_event_start_time.value|date('G.i', 'UTC') }}
+                {% if end_time is not empty and (start_date == end_date or end_date is empty) %}
+                  - {{ node.field_event_end_time.value|date('G.i', 'UTC') }}
+                {% endif %}
+              {% endif %}
+            </div>
+                    
+          {% if end_date is not empty and end_date > start_date %}
+            <div class="event-date2"> 
+                {{ _do }}               
+                {% set formatted_date2 = end_date|date('j F Y') %}
+                <span style="font-weight: bold;">{{ formatted_date2|replace({
+                  'January': 'stycznia',
+                  'February': 'lutego',
+                  'March': 'marca',
+                  'April': 'kwietnia',
+                  'May': 'maja',
+                  'June': 'czerwca',
+                  'July': 'lipca',
+                  'August': 'sierpnia',
+                  'September': 'września',
+                  'October': 'października',
+                  'November': 'listopada',
+                  'December': 'grudnia'
+                }) }}</span>                         
+              {% if end_time is not empty %}
+                 godz. {{ node.field_event_end_time.value|date('G.i', 'UTC') }}
+              {% endif %}
+            </div>
+          {% endif %} 
+          
+          {# placowka  #}
+          <div class="osrodek" style="margin-top: 50px; text-align:right" >
+            {{ content.field_osrodek }}
+          </div>
+        </div>
+      </div>
+    </div>
+  
+</article>
+
+
+
+{% else %}
+<!-- full mode -->
+<article class="event event-full" >
+<h2{{ title_attributes.addClass('node__title') }}>{{ label }}</h2>
+{# <div class="osrodek" style="text-align:right" >
+            {{ content.field_osrodek }}
+          </div> #}
+    <div class="event-image align-center">
+        {{ content.field_image}}
+    </div>
+    <div class="event-content d-flex flex-column h-100">
+        <div class="event-teaser">
+        {{ content.field_wstep }}
+        </div>
+        {# <div class="footer mt-auto"> #}
+        <div class="mt-auto">
+        {# start date  #}      
+        <div class="event-date">                  
+            {{ od }}
+            {% set formatted_date = start_date|date('j F Y') %}
+            <span>{{ formatted_date|replace({
+                'January': 'stycznia',
+                'February': 'lutego',
+                'March': 'marca',
+                'April': 'kwietnia',
+                'May': 'maja',
+                'June': 'czerwca',
+                'July': 'lipca',
+                'August': 'sierpnia',
+                'September': 'września',
+                'October': 'października',
+                'November': 'listopada',
+                'December': 'grudnia'
+            }) }}</span>              
+            {% if start_time is not empty %}
+                godz. {{ node.field_event_start_time.value|date('G.i', 'UTC') }}
+            {% if end_time is not empty and (start_date == end_date or end_date is empty) %}
+            -  {{ node.field_event_end_time.value|date('G.i', 'UTC') }}
+            {% endif %}
+            {% endif %}     
+        {% if end_date is not empty and end_date > start_date %}     
+            {{ _do }}         
+            {% set formatted_date2 = end_date|date('j F Y') %}
+            <span>{{ formatted_date2|replace({
+                'January': 'stycznia',
+                'February': 'lutego',
+                'March': 'marca',
+                'April': 'kwietnia',
+                'May': 'maja',
+                'June': 'czerwca',
+                'July': 'lipca',
+                'August': 'sierpnia',
+                'September': 'września',
+                'October': 'października',
+                'November': 'listopada',
+                'December': 'grudnia'
+            }) }}</span>                         
+            {% if end_time is not empty %}
+                godz. {{ node.field_event_end_time.value|date('G.i', 'UTC') }}
+            {% endif %}
+        </div>
+        {% endif %} 
+
+        
+        </div>
+        {# placowka  #}
+        <div class="osrodek">
+            {{ content.field_osrodek }}
+        </div>
+    </div>
+  
+  <div{{ content_attributes.addClass('node__content', 'clearfix', 'mt-5') }}>
+    {{ content | without ('field_gallery_image', 'field_front_news','field_zalaczniki','addtoany','prevnext_previous', 'prevnext_next', 'field_image', 'field_wstep', 'field_osrodek', 'field_event_start_date', 'field_event_end_date', 'field_event_start_time', 'field_event_end_time') }}
+  </div>
+ 
+    {% if node.field_zalaczniki and node.field_zalaczniki.value is not empty %}
+        <div class="attachments border-top">
+            <h5>Załączniki:</h5>
+            {{ content.field_zalaczniki }}
+        </div>
+    {% endif %}
+    {% if content.field_gallery_image is not empty %}
+  <div class="pole_galeria mt-5 align-center">
+      {{content.field_gallery_image}}
+  </div>
+
+{% endif %}
+  <div class="mt-4 w-100 text-left"> {{ content.addtoany }} </div>
+
+
+  <div class="row mt-5 p-2">
+    <div class="col">        
+        {% if content.prevnext_previous['#nid'] is not empty  %}
+          <div class="d-flex prevNextButtons">&#9666; {{ content.prevnext_previous }} </div>
+        {% endif %}
+    </div>    
+    <div class="col">
+      {% if content.prevnext_next['#nid'] is not empty %} 
+        <div class="d-flex justify-content-end prevNextButtons"> {{ content.prevnext_next }} &#9656;</div>
+      {% endif %}
+  </div>
+
+    {# {% set osrodek_value = node.field_osrodek %}
+    {% for item in osrodek_value %}
+        osrodek:{{content.field_osrodek}} id: {{ item.target_id }}
+    {% endfor %} #}
+
+
+</article>
+
+
+{% endif %}

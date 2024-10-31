@@ -1,0 +1,608 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+<style>
+	.btn-yt {
+		background-color: {{kolor_kategorii}}
+		;
+		color: {{bg_menu_text}}
+		;
+	}
+	{
+		# #block-gowilds-sub-main-menu a {
+			color: {{bg_menu_text}}
+			!important;
+		} #
+	}
+
+    @media screen and (min-width: 1024.1px){
+        .navigation:not(.menu--account) .gva_menu > li > a {
+		    color: {{ bg_menu_text }} !important;
+	    }
+    }
+
+	@media screen and(max-width:1024px) {
+		.navigation:not(.menu--account) .gva_menu > li > a {
+			color: #000 !important;
+		}
+	}
+</style>
+
+
+{% if view_mode == "teaser" %}
+<!-- teaser mode -->
+	<div class="sidebar">
+		<div class="kontakt_image">
+			{{ content.field_logo }}</div>
+		<div class="kontakt_title mt-5 mb-3 text-center disabled">
+			<h2 class="gsc-heading__title lheight-32 fsize-32 fweight-700 ">
+				<span>{{ content.field_osrodek }}</span>
+			</h2>
+		</div>
+		<div class="widget iconbox-one__single text-dark ">
+			{# <div class="iconbox-one__icon-inner ms-1">
+				<span class="iconbox-one__icon">
+					<i class="flaticon-address"></i>
+				</span>
+			</div> #}
+			<div class="iconbox-one__content-inner">
+				<h3 class="iconbox-six__title" style="line-height: 2.5vh;">
+					{{ node.field_adres.value }}<br>{{ node.field_miejscowosc.value }}
+				</h3>
+			</div>
+		</div>
+
+		<div class="widget iconbox-six__single text-dark  wow fadeIn animated mb-3" data-wow-delay="0.2s" style="visibility: visible; opacity: 1; animation-delay: 0.2s; animation-name: fadeIn;">
+			<div class="iconbox-six__content">
+				{# <div class="iconbox-six__icon-inner">
+					<span class="icon">
+						<i class="flaticon-phone"></i>
+					</span>
+				</div> #}
+				<div class="iconbox-six__content-inner">
+					<h3 class="iconbox-one__title">Telefon</h3>
+					<div class="iconbox-six__desc">
+						<a href="tel:{{ node.field_telefon.value }}">{{ content.field_telefon }}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="widget iconbox-six__single text-dark  wow fadeIn animated" data-wow-delay="0.4s" style="visibility: visible; opacity: 1; animation-delay: 0.4s; animation-name: fadeIn;">
+			<div class="iconbox-six__content">
+				{# <div class="iconbox-six__icon-inner">
+					<span class="icon">
+						<i class="flaticon-email"></i>
+					</span>
+				</div> #}
+				<div class="iconbox-six__content-inner">
+					<h3 class="iconbox-one__title">e-mail</h3>
+					<div class="iconbox-six__desc">
+						<a href="mailto:{{ node.field_email.value }}">{{ content.field_email }}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+{% elseif view_mode == "teaser_2"%}
+	<div
+		class="kontakt-teaser2">
+		<!--  widok paska topBar2   -->
+		<div class="topbar__right">
+			<div class="d-flex justify-content-end align-items-center">
+				{# <div class="logo">
+					<a href="{{ node.field_www.value }}">{{ content.field_logo }}</a>
+				</div> #}
+				<div class="d-flex align-items-center">
+					{# <div class="topbar-links" style="color:#000"> #}
+					{# <img src="/sites/default/files/media-icons/arrow.svg" class="arrow"><a href="{{ node.field_www.value }}/kontakt">Skontaktuj się z nami</a> #}
+					{# <a href="{{ node.field_www.value }}/kontakt" class="topBarKontakt">KONTAKT</a> #}
+					{# </div> #}
+					<div class="topbar-social ps-3">
+						<a href="{{ node.field_google_maps.value }}" target="_blank">
+							<i class="fa fa-location-dot"></i>
+						</a>
+						<a href="{{ node.field_facebook.value }}" target="_blank">
+							<i class="fab fa-facebook"></i>
+						</a>
+						<a href="{{ node.field_instagram.value }}" target="_blank">
+							<i class="fab fa-instagram"></i>
+						</a>
+						<a href="{{ node.field_youtube.value }}" target="_blank">
+							<i class="fab fa-youtube"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% elseif view_mode == "teaser_3"%}
+	{# widok paska topBar1  #}
+	<div class="kontakt-teaser3">
+		<div class="logo">
+			<a href="{{ node.field_www.value }}">{{ content.field_logo }}</a>
+		</div>
+	</div>
+
+{% elseif view_mode == "menu" %}
+	<nav aria-labelledby="block-gowilds-sub-main-menu-menu" id="block-gowilds-sub-main-menu" class="contextual-region block block-menu navigation menu--main">
+		<div class="gva-navigation">
+			<ul
+				class="clearfix gva_menu gva_menu_main">
+				{# <li class="menu-item"> 
+					<a href="{{ node.field_www.value }}" class="p-0 m-0">
+					<img src="{{ file_url(node.field_logo.entity.uri.value) }}" style="background: #fff; max-width: 88px; border-radius: 20px; position: relative;  top: 10px;" >
+					</a> 
+				</li> #}
+				<li class="menu-item">
+					<a href="{{ node.field_www.value }}/aktualnosci">Aktualności</a>
+				</li>
+				<li class="menu-item">
+					<a href="{{ node.field_www.value }}/zajecia">Zajęcia w placówce</a>
+				</li>
+				<li class="menu-item menu-item--expanded">
+					<a href="">
+						Konkursy<span class="icaret nav-plus fas fa-chevron-down"></span>
+					</a>
+					<ul class="menu sub-menu">
+						<li class="menu-item">
+							<a href="{{ node.field_www.value }}/konkursy" style="color: #222 !important;">Weź udział</a>
+						</li>
+						<li class="menu-item">
+							<a href="{{ node.field_www.value }}/wyniki" style="color: #222 !important;">Wyniki konkursów</a>
+						</li>
+					</ul>
+				</li>
+				<li class="menu-item menu-item--expanded">
+					<a href="">Do pobrania<span class="icaret nav-plus fas fa-chevron-down"></span>
+					</a>
+					<ul class="menu sub-menu">
+						<li class="menu-item">
+							<a href="/druki" style="color: #222 !important;">Druki</a>
+						</li>
+						<li class="menu-item">
+							<a href="/platnosci" style="color: #222 !important;">Formy płatności</a>
+						</li>
+					</ul>
+				</li>
+				<li class="menu-item menu-item--expanded">
+					<a href="">Info o nas<span class="icaret nav-plus fas fa-chevron-down"></span>
+					</a>
+					<ul class="menu sub-menu">
+						<li class="menu-item">
+							<a href="{{ node.field_www.value }}/o_nas" style="color: #222 !important;">Historia i misja</a>
+						</li>
+						<li class="menu-item">
+							<a href="../wydawnictwa-gadzety" style="color: #222 !important;">Wydawnictwa i gadżety</a>
+						</li>
+						<li class="menu-item">
+							<a href="../granty" style="color: #222 !important;">Granty i projekty</a>
+						</li>
+						<li class="menu-item">
+							<a href="https://mdk.bielsko.pl/" style="color: #222 !important;">Archiwalna strona</a>
+							
+						</li>
+					</ul>
+				</li>
+				<li class="menu-item">
+					<a href="{{ node.field_www.value }}/kontakt" class="dkKontaktMenuLink">Kontakt</a>{#class="topBarKontakt"#}
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<script>
+		var gdzie = document.getElementById("gdzie1");		
+		var addr = "/gmn";
+		if (gdzie) {
+			gdzie.setAttribute("href", addr);
+		}
+	</script>
+{% elseif view_mode == "teaser_4"%}
+	<!-- widok bloku video  -->
+	<style>
+		div#dk-video {
+			border-bottom: 10px solid{{ kolor_kategorii }};
+			padding: 40px 0;
+		}
+		.zapisyNonStopPlac {
+			border: 5px solid{{kolor_kategorii}};
+			margin-top: 40px;
+		}
+		.sprawdzPlac{
+			color: {{kolor_kategorii}};
+			letter-spacing: 4px;
+		}
+	</style>
+
+	<div class="bb-container container">
+		<div class="row row-wrapper">
+			<div class="gsc-column col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+				<div class="column-inner  bg-size-cover ">
+					<div class="column-content-inner">
+						<div class="widget gsc-heading gsc-heading__align-left  mt-5 style-1" style="max-width: 680px; visibility: visible; opacity: 1; ">
+							<div class="gsc-heading__content clearfix">
+								<div class="gsc-heading__sub-title fweight-600 text-white">
+									<span class="fsize-18 ps-0">ŁAPIEMY DOBRE CHWILE</span>
+								</div>
+								<h2 class="gsc-heading__title fsize-40 fweight-700 text-white">
+									{% set osrodek_field = node.field_osrodek %}
+									{% if osrodek_field.entity %}
+										{% set osrodek_term = osrodek_field.entity %}
+										{{ osrodek_term.name.value }}
+									{% endif %}
+								</h2>
+							</div>
+							<div class="gsc-heading__action clearfix mt-30">
+								<a href="{{ node.field_youtube.value }}" class="btn btn-yt">
+									<span>Nasz kanał YouTube</span>
+								</a>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+			<div class="gsc-column el-39131318 col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12  align-flex-center  ">
+				<div class="column-inner  bg-size-cover ">
+					<div class="column-content-inner">
+						<div class="block block-custom-text ">
+							<div class="block-content">
+
+								{% if content.field_listing_video|render %}
+									<div class="listing-info-block listing-video" id="listing-video">
+										<div class="block-content">
+											{{ listing_video|raw }}
+										</div>
+									</div>
+								{% endif %}
+								{# <iframe width="560" height="315" src="https://www.youtube.com/embed/kJ8YTw9KBnQ?si=6696S5h8B2NnEv76&amp;autoplay=1&amp;mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe> #}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% else %}
+
+<!-- else mode -->
+	{# <article {{ attributes.addClass(classes)|without('about')}}>
+		<header class="my-5">
+			<h1{{title_attributes.addClass('node__title', 'label')}}>{{ content.field_osrodek }}</h1>
+		</header>
+		<div{{content_attributes.addClass('node__content','clearfix')}}>
+			{{ content.field_adres }}
+			{{ content.field_miejscowosc }}
+			<br>
+			<div>
+				<span class="zdj_kierownik">{{ content.field_foto }}</span>
+				<span class="kierownik">{{ content.field_dyrektor }}</span>
+			</div>
+			<a href="mailto:{{ node.field_email.value }}">{{ content.field_email }}</a>
+			<a href="tel:{{ node.field_telefon.value }}">{{ content.field_telefon }}</a>
+		</div>
+		<div class="mt-5">{{ content.body}}
+			<div>
+	</article> #}
+
+	
+		<div class="row text-center">
+			{# <div class="col-md-12 kontaktNaglowek"> #}
+			<div class="col-md-12">
+			 
+			<div class="widget gsc-heading gsc-heading__align-center centralaName style-1 pt-0 wow fadeInDown animated" style="max-width: 800px;/* visibility: visible; */opacity: 1;animation-delay: 0.2s;animation-name: fadeInDown;" data-wow-delay="0.2s">
+            
+            <div class="gsc-heading__content clearfix">
+                              <h3 class="gsc-heading__title fweight-400 ">
+                  <span>{{ node.field_osrodek.entity.label }}</span>
+               </h3>                                 <div class="gsc-heading__desc"><p style="text-align: center;"><span class="searchGoogleMaps"><i class="fa fa-location-dot" style="margin-right: 15px;"></i>{{ node.field_adres.value }}, {{ node.field_miejscowosc.value }}</span></p></div>
+                           </div>
+         		</div>
+				
+			</div>
+		</div>
+
+		{# <div class="row text-center mb-5">
+			<div class="col-md-12 kontaktAdres">
+				 <span>{{ node.field_adres.value }}</span><span style="margin-left: 15px;">{{ node.field_miejscowosc.value }}</span>
+			</div>
+		</div> #}
+<article {{ attributes.addClass(classes)|without('about')}}>
+		{# <div class="row text-center mb-3">
+			<div class="col-md-6 kontaktKontakty">
+					<a href="tel:{{ node.field_telefon.value }}" class="telefonKontakt">{{ content.field_telefon }}</a>
+			</div>
+			<div class="col-md-6">
+				<a href="mailto:{{ node.field_email.value }}">{{ node.field_email.value }}</a>
+			</div>
+		</div> #}
+
+		<div class="row mb-4">
+			<div class="col-md-12 mb-3 kontaktObrazek">
+				{{ content.field_image }}
+			</div>
+		</div>
+		{% if node.field_zaloga_1_name.value is not empty %}
+		<div class="row mb-5 d-flex">
+			{# Wizytowka pierwszego pracownika #}
+			<div class="col-md-6">
+					<div class="widget gva-job-box clearfix fontBasic ">
+						<div class="box-content">
+							<div class="logo-inner">
+								<img class="employee-image" src="{{ file_url(node.field_zaloga_1_photo.entity.uri.value) }}" alt="{{ node.field_zaloga_1_photo.alt }}">               
+							</div>   
+								<div class="content-inner">
+									<div class="job-type">{{ node.field_zaloga_1_stanowisko.entity.label }}</div>
+									<h3 class="box-title">{{ node.field_zaloga_1_name.value }}</h3>
+									<hr>
+									<div class="information">
+										<ul>
+											{% if node.field_zaloga_1_stacjonarny.value is not empty or node.field_zaloga_1_kom.value is not empty %}
+											<li>
+												{% if node.field_zaloga_1_stacjonarny.value is not empty %}
+												{% set value1 = node.field_zaloga_1_stacjonarny.value %}
+												{% set formatted_value1 = value1[0:3] ~ ' ' ~ value1[3:3] ~ ' ' ~ value1[6:3] %}
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">Call</i>
+												<a href="tel:{{ node.field_zaloga_1_stacjonarny.value }}">{{ formatted_value1 }}</a>
+												{% endif %}
+												{% if node.field_zaloga_1_kom.value is not empty %}
+												{% set valueKom1 = node.field_zaloga_1_kom.value %}
+												{% set formatted_valueKom1 = valueKom1[0:3] ~ ' ' ~ valueKom1[3:3] ~ ' ' ~ valueKom1[6:3] %}
+												<i class="material-symbols-outlined komIcon" style="color: #cdcbc8;">phone_android</i>
+												<a href="tel:{{node.field_zaloga_1_kom.value}}">{{formatted_valueKom1}}</a>
+												{% endif %}
+											</li>
+											{% endif %}
+											<li>
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">mail</i>
+												<a href="mailto:{{ node.field_zaloga_1_email.value }}">{{ node.field_zaloga_1_email.value }}</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						</div>  
+					</div>
+			</div>
+			{% endif %}
+			{% if node.field_zaloga_2_name.value is not empty %}
+			{# Wizytowka drugiego pracownika #}
+			<div class="col-md-6">
+					<div class="widget gva-job-box clearfix fontBasic ">
+						<div class="box-content">
+							<div class="logo-inner">
+								<img class="employee-image" src="{{ file_url(node.field_zaloga_2_photo.entity.uri.value) }}" alt="{{ node.field_zaloga_2_photo.alt }}">               
+							</div>   
+								<div class="content-inner">
+									<div class="job-type">{{ node.field_zaloga_2_stanowisko.entity.label }}</div>
+									<h3 class="box-title">{{ node.field_zaloga_2_name.value }}</h3>
+									<hr>
+									<div class="information">
+										<ul>
+											{% if node.field_zaloga_2_stacjonarny.value is not empty or node.field_zaloga_2_kom.value is not empty %}
+											<li>
+												{% if node.field_zaloga_2_stacjonarny.value is not empty %}
+												{% set value2 = node.field_zaloga_2_stacjonarny.value %}
+												{% set formatted_value2 = value2[0:3] ~ ' ' ~ value2[3:3] ~ ' ' ~ value2[6:3] %}
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">Call</i>
+												<a href="tel:{{ node.field_zaloga_2_stacjonarny.value }}">{{ formatted_value2 }}</a>
+												{% endif %}
+												{% if node.field_zaloga_2_kom.value is not empty %}
+												{% set valueKom2 = node.field_zaloga_2_kom.value %}
+												{% set formatted_valueKom2 = valueKom2[0:3] ~ ' ' ~ valueKom2[3:3] ~ ' ' ~ valueKom2[6:3] %}
+												<i class="material-symbols-outlined komIcon" style="color: #cdcbc8;">phone_android</i>
+												<a href="tel:{{node.field_zaloga_2_kom.value}}">{{formatted_valueKom2}}</a>
+												{% endif %}
+											</li>
+											{% endif %}
+											<li>
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">mail</i>
+												<a href="mailto:{{ node.field_zaloga_2_email.value }}">{{ node.field_zaloga_2_email.value }}</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						</div>  
+					</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if node.field_zaloga_3_name.value is not empty %}
+		<div class="row mb-5 d-flex">
+			{# Wizytowka trzeciego pracownika #}
+			<div class="col-md-6">
+					<div class="widget gva-job-box clearfix fontBasic ">
+						<div class="box-content">
+							<div class="logo-inner">
+								<img class="employee-image" src="{{ file_url(node.field_zaloga_3_photo.entity.uri.value) }}" alt="{{ node.field_zaloga_3_photo.alt }}">               
+							</div>   
+								<div class="content-inner">
+									<div class="job-type">{{ node.field_zaloga_3_stanowisko.entity.label }}</div>
+									<h3 class="box-title">{{ node.field_zaloga_3_name.value }}</h3>
+									<hr>
+									<div class="information">
+										<ul>
+											{% if node.field_zaloga_3_stacjonarny.value is not empty or node.field_zaloga_3_kom.value is not empty %}
+											<li>
+												{% if node.field_zaloga_3_stacjonarny.value is not empty %}
+												{% set value3 = node.field_zaloga_3_stacjonarny.value %}
+												{% set formatted_value3 = value3[0:3] ~ ' ' ~ value3[3:3] ~ ' ' ~ value3[6:3] %}
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">Call</i>
+												<a href="tel:{{ node.field_zaloga_3_stacjonarny.value }}">{{ formatted_value3 }}</a>
+												{% endif %}
+												{% if node.field_zaloga_3_kom.value is not empty %}
+												{% set valueKom3 = node.field_zaloga_3_kom.value %}
+												{% set formatted_valueKom3 = valueKom3[0:3] ~ ' ' ~ valueKom3[3:3] ~ ' ' ~ valueKom3[6:3] %}
+												<i class="material-symbols-outlined komIcon" style="color: #cdcbc8;">phone_android</i>
+												<a href="tel:{{node.field_zaloga_3_kom.value}}">{{formatted_valueKom3}}</a>
+												{% endif %}
+											</li>
+											{% endif %}
+											<li>
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">mail</i>
+												<a href="mailto:{{ node.field_zaloga_3_email.value }}">{{ node.field_zaloga_3_email.value }}</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						</div>  
+					</div>
+			</div>
+			{% endif %}
+			{% if node.field_zaloga_4_name.value is not empty %}
+			{# Wizytowka czwartego pracownika #}
+			<div class="col-md-6">
+					<div class="widget gva-job-box clearfix fontBasic ">
+						<div class="box-content">
+							<div class="logo-inner">
+								<img class="employee-image" src="{{ file_url(node.field_zaloga_4_photo.entity.uri.value) }}" alt="{{ node.field_zaloga_4_photo.alt }}">               
+							</div>   
+								<div class="content-inner">
+									<div class="job-type">{{ node.field_zaloga_4_stanowisko.entity.label }}</div>
+									<h3 class="box-title">{{ node.field_zaloga_4_name.value }}</h3>
+									<hr>
+									<div class="information">
+										<ul>
+											{% if node.field_zaloga_4_stacjonarny.value is not empty or node.field_zaloga_4_kom.value is not empty %}
+											<li>
+												{% if node.field_zaloga_4_stacjonarny.value is not empty %}
+												{% set value4 = node.field_zaloga_4_stacjonarny.value %}
+												{% set formatted_value4 = value4[0:3] ~ ' ' ~ value4[3:3] ~ ' ' ~ value4[6:3] %}
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">Call</i>
+												<a href="tel:{{ node.field_zaloga_4_stacjonarny.value }}">{{ formatted_value4 }}</a>
+												{% endif %}
+												{% if node.field_zaloga_4_kom.value is not empty %}
+												{% set valueKom4 = node.field_zaloga_4_kom.value %}
+												{% set formatted_valueKom4 = valueKom4[0:3] ~ ' ' ~ valueKom4[3:3] ~ ' ' ~ valueKom4[6:3] %}
+												<i class="material-symbols-outlined komIcon" style="color: #cdcbc8;">phone_android</i>
+												<a href="tel:{{node.field_zaloga_4_kom.value}}">{{formatted_valueKom4}}</a>
+												{% endif %}
+											</li>
+											{% endif %}
+											<li>
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">mail</i>
+												<a href="mailto:{{ node.field_zaloga_4_email.value }}">{{ node.field_zaloga_4_email.value }}</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						</div>  
+					</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if node.field_zaloga_5_name.value is not empty %}
+		<div class="row mb-5 d-flex">
+			{# Wizytowka piatego pracownika #}
+			<div class="col-md-6">
+					<div class="widget gva-job-box clearfix fontBasic ">
+						<div class="box-content">
+							<div class="logo-inner">
+								<img class="employee-image" src="{{ file_url(node.field_zaloga_5_photo.entity.uri.value) }}" alt="{{ node.field_zaloga_5_photo.alt }}">               
+							</div>   
+								<div class="content-inner">
+									<div class="job-type">{{ node.field_zaloga_5_stanowisko.entity.label }}</div>
+									<h3 class="box-title">{{ node.field_zaloga_5_name.value }}</h3>
+									<hr>
+									<div class="information">
+										<ul>
+											{% if node.field_zaloga_5_stacjonarny.value is not empty or node.field_zaloga_5_kom.value is not empty %}
+											<li>
+												{% if node.field_zaloga_5_stacjonarny.value is not empty %}
+												{% set value5 = node.field_zaloga_5_stacjonarny.value %}
+												{% set formatted_value5 = value5[0:3] ~ ' ' ~ value5[3:3] ~ ' ' ~ value5[6:3] %}
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">Call</i>
+												<a href="tel:{{ node.field_zaloga_5_stacjonarny.value }}">{{ formatted_value5 }}</a>
+												{% endif %}
+												{% if node.field_zaloga_5_kom.value is not empty %}
+												{% set valueKom5 = node.field_zaloga_5_kom.value %}
+												{% set formatted_valueKom5 = valueKom5[0:3] ~ ' ' ~ valueKom5[3:3] ~ ' ' ~ valueKom5[6:3] %}
+												<i class="material-symbols-outlined komIcon" style="color: #cdcbc8;">phone_android</i>
+												<a href="tel:{{node.field_zaloga_5_kom.value}}">{{formatted_valueKom5}}</a>
+												{% endif %}
+											</li>
+											{% endif %}
+											<li>
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">mail</i>
+												<a href="mailto:{{ node.field_zaloga_5_email.value }}">{{ node.field_zaloga_5_email.value }}</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						</div>  
+					</div>
+			</div>
+			{% endif %}
+			{% if node.field_zaloga_6_name.value is not empty %}
+			{# Wizytowka szóstego pracownika #}
+			<div class="col-md-6">
+					<div class="widget gva-job-box clearfix fontBasic ">
+						<div class="box-content">
+							<div class="logo-inner">
+								<img class="employee-image" src="{{ file_url(node.field_zaloga_6_photo.entity.uri.value) }}" alt="{{ node.field_zaloga_6_photo.alt }}">               
+							</div>   
+								<div class="content-inner">
+									<div class="job-type">{{ node.field_zaloga_6_stanowisko.entity.label }}</div>
+									<h3 class="box-title">{{ node.field_zaloga_6_name.value }}</h3>
+									<hr>
+									<div class="information">
+										<ul>
+											{% if node.field_zaloga_6_stacjonarny.value is not empty or node.field_zaloga_6_kom.value is not empty %}
+											<li>
+												{% if node.field_zaloga_6_stacjonarny.value is not empty %}
+												{% set value6 = node.field_zaloga_6_stacjonarny.value %}
+												{% set formatted_value6 = value6[0:3] ~ ' ' ~ value6[3:3] ~ ' ' ~ value6[6:3] %}
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">Call</i>
+												<a href="tel:{{ node.field_zaloga_6_stacjonarny.value }}">{{ formatted_value6 }}</a>
+												{% endif %}
+												{% if node.field_zaloga_6_kom.value is not empty %}
+												{% set valueKom6 = node.field_zaloga_6_kom.value %}
+												{% set formatted_valueKom6 = valueKom6[0:3] ~ ' ' ~ valueKom6[3:3] ~ ' ' ~ valueKom6[6:3] %}
+												<i class="material-symbols-outlined komIcon" style="color: #cdcbc8;">phone_android</i>
+												<a href="tel:{{node.field_zaloga_6_kom.value}}">{{formatted_valueKom6}}</a>
+												{% endif %}
+											</li>
+											{% endif %}
+											<li>
+												<i class="material-symbols-outlined" style="color: #cdcbc8;">mail</i>
+												<a href="mailto:{{ node.field_zaloga_6_email.value }}">{{ node.field_zaloga_6_email.value }}</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+						</div>  
+					</div>
+			</div>
+		</div>
+		{% endif %}
+
+	</article>
+<script>
+ function searchInGoogleMaps(searchQuery) {
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+        window.open(googleMapsUrl, '_blank');
+    }
+
+    
+    const element = document.querySelector('.searchGoogleMaps');
+
+    element.addEventListener('click', function() {
+        const text = "Bielsko-Biała " + document.querySelector('.gsc-heading__title').innerText.trim();
+        searchInGoogleMaps(text);
+    });
+</script>
+
+{% endif %}

@@ -1,0 +1,221 @@
+{%
+  set classes = [
+    'node',
+    'node-detail',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+
+{% if content.field_osrodek['#object'].field_osrodek.entity %}
+    {# Pobierz kolor z powiązanej kategorii "osrodek" #}
+    {% set kolor = content.field_osrodek['#object'].field_osrodek.entity.field_kolor.value %}
+{% endif %}
+
+
+{% if view_mode == 'teaser' %} 
+<!-- Widok listy na stronie MDK-->
+<div class="post-block teaser-2">
+    <div class="content-wrap">
+      <div class="post-content">
+          <div class="post-meta">            
+            <div class="content-inner d-flex">
+                <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div>
+                <div class="date" style="color: {{ kolor }}">{{ node.getCreatedTime()|date('U')|format_date('my_date') }}</div>              
+              {# <span class="post-author"><i class="fas fa-user-circle"></i>{{ author_name }}</span> #}
+              {# <span class="post-comment"><i class="fas fa-comments"></i>{{ comment_count }} {{ 'Comments'|t }}</span> #}
+            </div>
+          </div>
+          <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+          <div class="post">{{ content.field_wstep }}</div>   
+          <a class="read-more" style="color: {{ kolor }}" href="{{ url }}">
+            <span>{{ 'Czytaj więcej'|t }}</span>
+            <i class="las la-arrow-right"></i>
+          </a>      
+      </div>
+      <div class="post-image">
+        {{ content.field_image }}
+        <div class="post-created" style="background: {{kolor}}"> 
+          <span class="day">{{ node.getCreatedTime()|date("d") }}</span>
+          <span class="month">{{ node.getCreatedTime()|date("M") }}</span>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{% elseif view_mode == 'teaser_2' %} 
+<!-- Widok promowanych na stronie MDK-->
+  <div class="feature-block-three__single">
+    <div class="feature-block-three__content">
+      <div class="feature-block-three__img">
+        {{ content.field_image }} 
+      </div>
+      <div class="feature-block-three__content-inner">
+        {% if node.field_data_wydarzenia and node.field_data_wydarzenia.value is not empty %}
+        <div class="event-block">
+            <div class="date">{{ node.field_data_wydarzenia.value|date('U')|format_date('my_date') }}</div>     
+        </div>
+        {% endif %}
+
+        <div class="feature-block-three__content-top">
+          <h4 class="feature-block-title"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h4>
+          <a class="feature-block-three__icon" href="{{ url }}"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="feature-block-three__desc">{{ content.field_wstep }}</div>
+        <div class="rodzajWydarzenia border-top">
+            <div class="post-categories"> {{ content.field_rodzaj_ogloszenia }} </div>
+        </div>           
+      </div>
+      <a class="feature-block-three__overlay-link" href="{{ url  }}"></a>                        
+    </div>
+  </div>
+
+
+
+{% elseif view_mode == 'teaser_3' %} 
+
+<!-- Widok pozostałych w bloku - sidebar -->
+<div class="post-block teaser-1">
+    <div class="post-image">
+      {{ content.field_image }}
+      <div class="post-created"> 
+        <span class="day">{{ node.getCreatedTime()|date("d") }}</span>
+        <span class="month">{{ node.getCreatedTime()|date("M") }}</span>
+      </div>
+    </div>
+    <div class="post-content">
+        {{ content.field_post_category }}
+        <div class="post-content-inner">
+          <div class="post-meta">
+            <span class="post-date"><i class="fas fa-calendar"></i> {{ node.getCreatedTime()|date('U')|format_date('my_date') }}</span>            
+          </div>
+          <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>           
+        </div>      
+    </div>
+</div>
+
+{% elseif view_mode == 'teaser_4' %} 
+<div class="feature-block-four__single">
+  <div class="feature-block-four__content">
+    <div class="feature-block-four__image">
+        {{ content.field_image }}
+    </div>
+    <div class="feature-block-four__box-content">
+      <div class="feature-block-four__content-inner">
+        <div class="feature-block-four__sub-title">{{ content.field_rodzaj_ogloszenia }}</div>
+        <h3 class="feature-block-four__title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a></h3>                              
+      </div>
+      <a class="feature-block-four__arrow" href="{{ url }}"><i class="fa-solid fa-arrow-right"></i></a>  
+    </div>
+  </div>
+    <a class="feature-block-four__overlay-link" href="{{ url }}"></a>                     
+</div>
+
+
+
+{% elseif view_mode == 'frontpage' %} 
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        {# <div class="post">{{ content.field_wstep }}</div> #}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% elseif view_mode == 'slider_wydarzenie' %} 
+<!-- Start Display article slider_wydarzenie -->
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        <div class="post">{{ content.field_wstep }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% elseif view_mode == 'email_html' %}
+<!-- Start Display article for email page -->
+<article class="event event-frontpage" style="overflow:auto;" >      
+    <div style="float:left; max-width:40%; margin:20px">
+      {{ content.field_image}}
+    </div>
+    
+    <div >
+      <div class="event-content d-flex flex-column h-100">
+        <p style="margin-bottom:10px"><strong>News</strong><p>
+        <h2{{ title_attributes.addClass('node__title') }}>
+          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+        </h2>
+        <div class="event-teaser">
+          {{ content.field_wstep }}
+        </div>
+      </div>
+    </div>
+  
+</article>
+
+
+{% else %}
+<!-- else view -->
+<article{{ attributes.addClass(classes) }}>
+    <div class="post-block">  
+        {{ title_prefix }}
+            <h1{{ title_attributes.addClass('post-title') }}>{{ label }}</h1>
+        {{ title_suffix }}  
+            {# <div class="post-meta d-flex align-items-center justify-content-between">
+              <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div>
+              <div class="post-author">
+                <i class="fas fa-calendar"></i>{{ node.getCreatedTime()|date('U')|format_date('my_date') }}
+              </div>
+              <div class="px-3">  {{ content.field_osrodek }} </div>
+            </div> #}
+    </div>
+
+
+    <div class="post-thumbnail post-{{ post_format }} align-center">
+        {% if post_format == 'video' or post_format == 'audio' and gva_iframe %}
+        {{ gva_iframe|raw }}
+        {% elseif post_format == 'gallery' and content.field_post_gallery %}
+        {{ content.field_post_gallery }}
+        {% else %}
+        {{ content.field_image }}
+        {% endif %}  
+    </div>
+
+    <div class="post-content">      
+        <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+            {{ content|without('prevnext_previous', 'prevnext_next','field_image','field_rodzaj_ogloszenia', 'field_post_gallery', 'comment', 'field_zalaczniki', 'field_data_wydarzenia', 'field_czas_rozpoczecia', 'field_osrodek') }}
+        </div>
+    </div>
+
+    {% if node.field_zalaczniki and node.field_zalaczniki.value is not empty %}
+        <div class="attachments border-top">
+            <h5>Załączniki:</h5>
+            {{ content.field_zalaczniki }}
+        </div>
+    {% endif %}
+
+</article>
+{# <div style="position:relative">
+  <div class="mb-5 px-3 text-left" style="background-color:{{kolor}}; color:#fff">  {{ content.field_osrodek }} </div>
+</div> #}
+{% endif %}

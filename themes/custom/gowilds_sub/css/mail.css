@@ -1,0 +1,57 @@
+body{    
+    font-size: 16px !important;              
+}
+
+#newsletter {
+    background: #ddd;
+}
+
+p {
+    font-size: 14px !important;        
+    line-height: 20px !important;       
+}
+
+a {
+    color:#001741;
+}
+
+h2 {
+    font-size: 16px;
+    line-height: 1.6rem;
+    
+}
+
+label {
+    font-weight: 700;
+    color: #d02c15;
+}
+
+img {
+    max-width: 100%;
+}
+
+.field > .field__item {
+    max-width: 800px ;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+    overflow: auto;    
+}
+
+#stopka a, #stopka a:link, #stopka a:visited {
+    color:#000;
+}  
+
+.text-align-center{
+    text-align: center;
+}
+
+.event-date, .event-date2  {
+    font-size: 1rem;
+}
+
+.stopka {
+    margin-bottom: 50px;
+}

@@ -1,0 +1,541 @@
+{%
+	set classes = [
+		'node',
+		'node-detail',
+		'node--type-' ~ node.bundle|clean_class,
+		node.isPromoted() ? 'node--promoted',
+		node.isSticky() ? 'node--sticky',
+		not node.isPublished() ? 'node--unpublished',
+		view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+		'clearfix',
+	]
+%}
+
+{% set conBody  %}{{ content.body }}{% endset %}
+{% set conAddress %}{{ node.field_listing_address.value }}{% endset %}
+{% set conVideo %}{{ node.field_listing_video.value }}{% endset %}
+
+{# Sprawdź, czy istnieje relacja do kategorii "osrodek" #}
+{% if content.field_osrodek['#object'].field_osrodek.entity %}
+	{% set kolor = content.field_osrodek['#object'].field_osrodek.entity.field_kolor.value %}
+{% endif %}
+
+
+{% if view_mode == 'frontpage' %} 
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        <div class="post">{{ content.field_wstep }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% elseif view_mode == 'teaser' %} 
+<!-- teaser mode -->
+<div class="listing-one__single teaser_1">
+	<div class="listing-one__wrap">  
+		<div class="listing-one__image">
+			{{ content.field_image }}
+		</div>
+		<div class="listing-one__content minimumZajecia">  
+			<div class="listing-one__content-inner">
+				<div class="listing-one__content-top">
+					<div class="listing-one__preview">
+						{% if content.field_listing_gallery %}
+							<div class="gallery-popup">{{ content.field_listing_gallery }}</div>
+						{% endif %}  
+						{% if content.field_listing_video|render %}
+							<div class="listing-one__video">
+								<a class="popup-video" href="{{ conVideo|trim }}"><i class="icon la la-video-camera"></i></a>
+							</div>
+						{% endif %}
+					</div>
+					<div class="listing-one__category">{{ content.field_rodzaj_zajec }}</div>
+				</div>
+				<h3 class="listing-one__title"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h3>
+				<div class="listing-one__groups">					
+					<div class="listing-one__address"><i class="las la-user-friends" ></i>
+						{% for item in node.field_przeznaczenie %}
+							{{ item.entity.label }}{% if not loop.last %}, {% endif %}
+						{% endfor %}
+					</div>
+				</div>
+				<div class="listing-one__info">					
+					<div class="listing-one__read-more"><a href="{{ url }}" >Czytaj więcej<i class="las la-arrow-right"></i></a></div>
+				</div>
+			</div>
+		</div>
+	</div>   
+</div> 
+
+{% elseif view_mode == 'teaser_2' %} 
+<!-- Wolne miejsca na Zajęcia  -->
+<div class="zajecia-teaser2">
+    {# <div class="row"> #}
+        {# <div class="col-7">
+            <div class="px-3 d-flex flex-column">
+				<h3 class="title border-bottom">{{ label }}</h3>
+                <div class="opis fsize-15">{{ content.field_info_wolne }}</div>                
+            </div>
+        </div> #}
+        {# <div class="col-5"> #}
+		<div>
+		<h3 class="title border-bottom">{{ content.field_info_wolne }}</h3>
+            <div class="listing-one__single teaser_1 ">
+                <div class="listing-one__wrap">  
+                    <div class="listing-one__image">
+                        {{ content.field_image }}
+                    </div>
+                    <div class="listing-one__content">  
+                        <div class="listing-one__content-inner">
+                            <div class="listing-one__content-top">
+                                <div class="listing-one__preview">
+                                    {% if content.field_listing_gallery %}
+                                        <div class="gallery-popup">{{ content.field_listing_gallery }}</div>
+                                    {% endif %}  
+                                    {% if content.field_listing_video|render %}
+                                        <div class="listing-one__video">
+                                            <a class="popup-video" href="{{ conVideo|trim }}"><i class="icon la la-video-camera"></i></a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="listing-one__category">{{ content.field_rodzaj_zajec }}</div>
+                            </div>
+                            <h3 class="listing-one__title"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h3>
+                            <div class="listing-one__groups">					
+                                <div class="listing-one__address"><i class="las la-user-friends" ></i>
+                                    {% for item in node.field_przeznaczenie %}
+                                        {{ item.entity.label }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="listing-one__info">					
+                                <div class="listing-one__read-more"><a href="{{ url }}" >Czytaj więcej<i class="las la-arrow-right"></i></a></div>
+                            </div>                
+                        </div>            
+                    </div>
+                    <div class="text-end w-100 osrodek" style="background-color:{{kolor}}; color:#fff">  {{ content.field_osrodek }} </div>
+                </div>   
+            </div> 
+        </div>
+    {# </div> #}
+</div>
+
+{% elseif view_mode == 'email_html' %} 
+<article style="overflow:auto">
+	<div style="float:left; max-width:40%; margin:20px">
+      {{ content.field_image}}
+    </div>
+	<div class="">  
+			<div class="listing-one__content-inner">		
+			<p style="margin-bottom:10px"><strong>Zajęcia</strong><p>		
+				<h3 class=""><a href="{{ url }}" rel="bookmark">{{ label }}</a></h3>
+				<div class="listing-one__content-top">					
+					<div class="listing-one__category">
+						<i>Rodzaj zajęć:</i> 
+						<strong>{{ content.field_rodzaj_zajec }}</strong>
+					</div>
+				</div>
+				<div class="listing-one__groups">					
+					<div class="listing-one__address" style="margin-top:15px"><i>Przeznaczenie:</i><br>
+						<strong>
+						{% for item in node.field_przeznaczenie %}
+							{{ item.entity.label }}{% if not loop.last %}, {% endif %}
+						{% endfor %}
+						</strong>
+					</div>
+					
+					<div style="margin-top:15px">
+						<i>Termin zajęć:</i>
+						{{ content.field_termin_zajec}}
+					</div>
+
+				</div>
+				{# <div class="listing-one__info" style="margin-top:40px">
+					<div class="listing-one__info-inner">
+						{% if node.field_listing_max_guests.value %}
+						<span class="listing-one__guests">
+							<i class="las la-user-friends"></i>
+							{{ node.field_listing_max_guests.value }}
+						</span>
+						{% endif %}
+						{% if node.field_listing_min_age.value %}
+						<span class="listing-one__age">
+							<i class="las la-user-plus"></i>
+							{{ node.field_listing_min_age.value }}
+						</span>
+						{% endif %}
+					</div>					
+				</div> #}
+			</div>
+		</div>
+</article>
+
+{% else %}
+<!-- full view -->
+<style>
+#placowkaLabel span:hover{
+	color: {{kolor}} !important;
+}
+</style>
+
+<article{{ attributes.addClass(classes)|without('about') }}>
+<div class="row mb-2">
+    <div class="col-md-12 text-center">
+        <h1 class="mb-0 fw-400" >{{ label }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="listing-one__category zajeciaSubTitle">
+			<strong>{{ content.field_rodzaj_zajec }}</strong>
+		</div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-md-12 text-center">
+        <div class="listing-one__groups zajeciaSubTitle">					
+					<div class="listing-one__address zajeciaSubTitle"><i class="las la-user-friends" ></i>
+						{% for item in node.field_przeznaczenie %}
+							{{ item.entity.label }}{% if not loop.last %}, {% endif %}
+						{% endfor %}
+					</div>
+				</div>
+    </div>
+	
+</div>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+	<h3 style="margin-right: 0; margin-bottom: 0 !important;"><span style="margin-right: 10px; font-weight: 500 !important;">Zapisy</span></h3><h3 style="margin-top: 5px;">
+        <div class="listing-one__groups zajeciaSubTitle">		
+		{# <i class="fa fa-location-dot" ></i> #}
+		<div class="listing-one__address zajeciaSubTitle mb-1" id="placowkaLabel" style="color: black !important; margin-bottom: 0 !important;">
+						<span>{{ node.field_osrodek.entity.label }}</span>
+					</div>
+					{# <div class="listing-one__address zajeciaSubTitle">
+					*adres DK*
+					</div> #}
+				</div>
+    </div>
+</div>
+
+<div class="row mb-4 text-center d-flex justify-content-center">
+    <div class="col-md-7">
+        <div class="kontakt">
+				{% for phone in node.field_telefon %}
+					<a href="phone:{{ phone.value }}" class="btn btn-primary">{{ phone.value }}</a>
+				{% endfor %}	
+				</h3>			
+			</div>
+    </div>
+	{# <div class="col-md-5">
+        <div class="kontakt">
+				<h3>
+				<div id="placowkaLabel" class="rodzaj zajeciaSubTitle btn btn-primary" style="background: {{ kolor }};"><span>{{ node.field_osrodek.entity.label }}</span></div></h3>
+		</div>
+    </div> #}
+</div>
+<div class="row mb-5">
+    <div class="col-md-12 d-flex justify-content-center">
+        {{ content.field_image }}
+			{% set alt = content.field_image.0['#item'].alt |raw %}
+			{% if content.field_image and alt != "foto" %}				
+				<small><i>{{ alt }}</i></small> 
+			{% endif %}
+    </div>
+</div>
+<div class="row mb-4">
+	<div class="col-md-6 mb-2">
+		<div class="termin"><label>Termin zajęć</label></div>
+		<div class="termin"><div style="max-width: fit-content;">{{content.field_grupa}}</div></div>
+	</div>
+	<div class="col-md-2 mb-2">
+	</div>
+	{# {% if node.field_cena.value is not empty %}
+	<div class="col-md-4 mb-2">
+		<div class="termin"><label>Opłata</label></div><br>
+		{{ node.field_cena.value }} zł {{ node.field_rodzaj_oplaty.entity.label }} 
+	</div>
+	{% endif %} #}
+    {# <div class="col-md-12">
+		<div class="termin"><div style="max-width: 500px">{{content.field_grupa}}</div></div>
+    </div> #}
+</div>
+{# <div class="row mb-4">
+    <div class="col-md-6">
+		<div class="termin"><div style="max-width: 500px">{{content.field_grupa}}</div></div>
+    </div>
+	<div class="col-md-2">
+	</div>
+	{% if node.field_cena.value is not empty %}
+	<div class="col-md-4">
+			{{ node.field_cena.value }} zł {{ node.field_rodzaj_oplaty.entity.label }} 
+		</div>
+	{% endif %}
+</div> #}
+
+{% if node.field_price_set.value and node.title.value|trim != node.field_rodzaj_oplaty.entity.label|trim %} 
+<div class="row mb-4">
+	<div class="col-md-12">
+		<div class="termin"><label>Opłata</label></div>
+		{{ node.field_cena.value }} zł {{ node.field_rodzaj_oplaty.entity.label }} 
+	</div>
+</div>
+{% endif %}
+<div class="row mb-2">
+    <div class="col-md-12">
+        {% if node.body is not empty %}
+			<div class="termin"><label>Charakterystyka zajęć</label></div>
+		{% endif %}
+		{{ content.body }}
+    </div>
+</div>
+{# {% if node.field_cena.value is not empty %}
+<div class="row mb-4">
+	<div class="col-md-12">
+			<div class="termin"><label>Opłata</label></div>{{ node.field_rodzaj_oplaty.entity.label }} {{ node.field_cena.value }} zł
+		</div>
+	</div>
+	{% endif %} #}
+<div class="row">
+	{% if node.field_nazwa_prowadzacy_st is not empty %}
+		{% if node.field_nazwa_prowadzacy_nd is not empty %}        
+			<div class="termin"><label>Instruktorzy</label></div>
+		{% else %}        
+			<div class="termin"><label>Instruktor</label></div>
+		{% endif %}  
+	{% endif %}
+    <div class="col-md-12">
+		<div class="row mb-4">
+			<div class="col-md-3">
+				{{ content.field_prowadzacy_st }}
+				<h5>{{ content.field_nazwa_prowadzacy_st }}</h5>
+			</div>
+			
+			<div class="col-md-9">
+				{{ content.field_prowadzacy_opis_st }}
+			</div>
+		</div>
+		<div class="col-md-12">
+	{% if node.field_nazwa_prowadzacy_nd is not empty %} 
+		<div class="row mb-4">
+		
+			<div class="col-md-3">
+				{{ content.field_prowadzacy_nd }}
+				<h5>{{ content.field_nazwa_prowadzacy_nd }}</h5>
+			</div>
+			<div class="col-md-9">
+				{{ content.field_prowadzacy_opis_nd }}
+			</div>
+		</div>
+	{% endif %}
+
+	{% if node.field_nazwa_prowadzacy_rd is not empty %} 
+		<div class="row mb-4">
+		
+			<div class="col-md-3">
+				{{ content.field_prowadzacy_rd }}
+				<h5>{{ content.field_nazwa_prowadzacy_rd }}</h5>
+			</div>
+			<div class="col-md-9">
+				{{ content.field_prowadzacy_opis_rd }}
+			</div>
+		</div>
+	{% endif %}
+
+	{% if node.field_nazwa_prowadzacy_th is not empty %} 
+		<div class="row mb-4">
+		
+			<div class="col-md-3">
+				{{ content.field_prowadzacy_th }}
+				<h5>{{ content.field_nazwa_prowadzacy_th }}</h5>
+			</div>
+			<div class="col-md-9">
+				{{ content.field_prowadzacy_opis_th }}
+			</div>
+		</div>
+	{% endif %}
+    </div>
+</div>
+
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        {% if node.field_osiagniecia is not empty %}
+			<div class="termin"><label>Osiągnięcia</label></div>
+		{% endif %}
+		{{ content.field_osiagniecia }}
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        {% if node.field_galeria_zdjec_max_3 is not empty %}
+			<div class="termin"><label>Galeria zdjęć</label></div>
+		{% endif %}
+		 <div class="pole_galeria mt-5 align-center">
+		{{ content.field_galeria_zdjec_max_3 }}
+		</div>
+    </div>
+</div>
+
+
+
+
+
+{# <!-- full mode -->
+<article{{ attributes.addClass(classes)|without('about') }}>
+	<div class="row mb-1">
+		<div class="col-sm-12 col-md-6">
+			{{ content.field_image }}
+			{% set alt = content.field_image.0['#item'].alt |raw %}
+			{% if content.field_image and alt != "foto" %}				
+				<small><i>{{ alt }}</i></small>
+			{% endif %}
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<div>
+				<h2>{{ label }}</h2>
+				<label>Rodzaj zajęć:</label>
+				<div class="rodzaj">{{ content.field_rodzaj_zajec }}</div>
+				<label>Dla kogo:</label>
+				<div class="rodzaj">{{ content.field_przeznaczenie }}</div>
+				<label>Placówka:</label>
+				<div class="rodzaj">{{ content.field_osrodek }}</div>
+			</div>			
+		</div>
+	</div>
+	
+	<div class="row mb-3">
+		<div class="col-sm-12 col-md-6 d-flex align-items-center justify-content-start instruktor">
+			<label class="me-3 text-dark">Instruktor:</label>
+			<strong>{{ node.field_prowadzacy.value }}</strong>
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<div class="kontakt">
+				<h3>Zapisy</h3>
+				{% for phone in node.field_telefon %}
+					<a href="phone:{{ phone.value }}" class="btn btn-primary">{{ phone.value }}</a>
+				{% endfor %}				
+			</div>
+		</div>
+	</div>
+  <div class="row mb-4">
+    <div class="col-12">
+      <p>{{ content.field_prowadzacy_opis }}</p>
+    </div>
+  </div>
+	{% if content.field_galeria_zdjec_max_3 is not empty %}
+			<div class="pole_galeria mt-5 align-center">
+				{{content.field_galeria_zdjec_max_3}}
+			</div>
+
+		{% endif %}
+	<div class="termin border-top border-bottom p-4 mt-4"><div style="max-width: 500px"><label>Termin zajęć</label>{{content.field_grupa}}</div></div>
+
+	{% if content.field_listing_video|render %}				
+		<div class="listing-info-block listing-video" id="listing-video">
+			<h3 class="title">{{ 'Video'|t }}</h3>
+			<div class="block-content">
+				{{ listing_video|raw }}
+			</div>  
+		</div>
+	{% endif %}
+	
+	<div class="osiagniecia mt-5">{{ content.field_osiagniecia }}</div>
+
+	
+</article>
+
+<div class="mb-5 px-3 text-end mdk" style="background-color:{{kolor}}; color:#fff"> 
+	{{ content.field_osrodek }} 
+</div> #}
+
+
+<!-- Start Display article for detail page -->
+<!-- full mode -->
+{# <article{{ attributes.addClass(classes)|without('about') }}>
+	<div class="row mb-1">
+		<div class="col-sm-12 col-md-6">
+			{{ content.field_image }}
+			{% set alt = content.field_image.0['#item'].alt |raw %}
+			{% if content.field_image and alt != "foto" %}				
+				<small><i>{{ alt }}</i></small>
+			{% endif %}
+			
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<div>
+				<h2 class="">{{ label }}</h2>
+				<label>Rodzaj zajęć:</label>
+				<div class="rodzaj"> {{ content.field_rodzaj_zajec }}</div>
+				<label>Dla kogo:</label>
+				<div class="rodzaj"> {{ content.field_przeznaczenie }}</div>
+				<label>Placówka:</label>
+				<div class="rodzaj"> {{ content.field_osrodek }}</div>
+			</div>			
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col-sm-12 col-md-6 d-flex align-items-center justify-content-start">
+			<label class="me-3 text-dark"> Instruktor:</label> <strong> {{ node.field_prowadzacy.value }} </strong>
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<div class="kontakt">
+				<h3>Zapisy</h3>
+
+				<!-- Podpięta galeria zdjęć -->
+				{# {% set nr = node.id %}
+				{% set ile = drupal_view_result('gallery', 'gallery_grid', nr )|length %}
+				{% if ile > 0 %} #}
+				{# <div class="galeria">
+					<h2>GALERIA FOTO</h2>
+					{{ drupal_view('kontakt_dk', 'zapisy') }}
+				</div> #}
+				{# {% endif %}
+
+				{% for phone in node.field_telefon %}
+					<a href="phone:{{ phone.value }}" class="btn btn-primary">{{ phone.value }}</a>
+				{% endfor %}				
+			</div>
+		</div>
+	</div>
+
+
+	<div{{ content_attributes.addClass('node__content', 'clearfix', 'my-5') }}>
+		{{ content|without('field_osiagniecia','field_prowadzacy', 'field_telefon', 'field_listing_video', 'field_grupa','field_rekrutacja', 'field_przeznaczenie', 'field_rodzaj_zajec','field_image', 'field_post_gallery', 'comment', 'field_zalaczniki', 'field_osrodek', 'field_prowadzacy_opis') }}
+	</div>	
+
+	<div class="termin border-top border-bottom p-4 mt-4" >					
+		<div style="max-width: 500px">
+			<label> Termin zajęć </label>
+			{{ content.field_grupa}}
+		</div>
+	</div>
+
+	{% if content.field_listing_video|render %}				
+		<div class="listing-info-block listing-video" id="listing-video">
+			<h3 class="title">{{ 'Video'|t }}</h3>
+			<div class="block-content">
+				{{ listing_video|raw }}
+			</div>  
+		</div>
+	{% endif %}
+	<div class="osiagniecia mt-5"> {{ content.field_osiagniecia }} </div>
+	
+</article>
+
+<div class="mb-5 px-3 text-end mdk" style="background-color:{{kolor}}; color:#fff"> 
+	 {{ content.field_osrodek }} 
+</div> #}
+
+{% endif %}

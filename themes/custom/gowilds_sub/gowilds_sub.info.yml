@@ -1,0 +1,34 @@
+name: Gowilds sub-theme
+type: theme
+description: 'A flexible, recolorable theme with many regions and a responsive, mobile-first layout.'
+package: gaviasthemes
+base theme: gowilds
+libraries:
+  - gowilds_sub/global-styling
+  - core/jquery
+  
+regions:
+  offcanvas: 'After Offcanvas'
+  topbar: 'Topbar'
+  topbar_right: 'Topbar Right'
+  search: 'Search'
+  user: 'User'
+  branding: 'Branding'
+  header_right: 'Header Right'
+  breadcrumbs: 'Breadcrumbs'
+  help: 'Help'
+  slideshow_content: 'Slideshow'
+  main_menu: 'Main menu'  
+  before_content: 'Before Content'
+  content: 'Main content'
+  sidebar_left: 'Sidebar Left'
+  sidebar_right: 'Sidebar Right'
+  after_content: 'After Content'
+  footer: 'Footer'
+  copyright: 'Copyright'
+  listing_sidebar: 'Listing Single Sidebar'
+  other: 'Other'
+
+version: '1.0.0'
+core_version_requirement: ^9 || ^10
+project: 'drupal'

@@ -1,0 +1,116 @@
+{#
+/**
+ * @file
+ * Theme override for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head> 
+    <head-placeholder token="{{ placeholder_token|raw }}">
+    <title>MDK Bielsko-Biała</title>
+    <css-placeholder token="{{ placeholder_token|raw }}">
+
+    <js-placeholder token="{{ placeholder_token|raw }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    {{ links_google_fonts|raw }}
+
+    {% if customize_css %}
+      <style type="text/css">
+        {{ customize_css|raw }}
+      </style>
+    {% endif %}
+
+    {% if customize_styles %}
+      {{ customize_styles|raw }}
+    {% endif %}
+
+    {% if pagebuilder_style %}
+      <style type="text/css">{{ pagebuilder_style|raw  }}</style>
+    {% endif %}
+
+  </head>
+
+  {% set body_classes = [
+    logged_in ? 'logged-in',
+    not root_path ? 'frontpage' : 'path-' ~ root_path|clean_class,
+    node_type ? 'node--type-' ~ node_type|clean_class,
+    node_id ? 'node-' ~ node_id|clean_class,
+    ]
+  %}
+
+  <body{{ attributes.addClass(body_classes) }}>
+
+    <a href="#main-content" class="visually-hidden focusable">
+      {{ 'Skip to main content'|t }}
+    </a>
+
+    {# {% if preloader %} 
+      <div id="gva-preloader" >
+        <div id="preloader-inner" class="cssload-container">
+          <div class="cssload-item cssload-moon"></div>
+        </div>
+      </div>
+    {% endif %}   #}
+    {% if preloader %} 
+    <div id="gva-preloader" >
+    <div class="loaderBody">
+        <div class="loader">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+        </div>
+    </div>
+    </div>
+{% endif %}
+    
+    {# OKNO POPUP  #}
+    <div id="popup1" class="popup1-modal .spb_top_center">                
+            <div class="content">
+                <a href="https://www.beskidzkikongreskultury.pl/"><img src="/sites/default/files/bkkrece.jpg"></a>
+        </div>            
+    </div>
+
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token|raw }}">
+    
+    {% if addon_template %}
+      <div class="permission-save-{{ save_customize_permission }}">
+         {% include addon_template %}
+      </div>  
+    {% endif %}
+    <a id="back-to-top" href="#" data-target="html" class="scroll-to-top" style="display: inline;"><i class="fa fa-angle-up"></i></a>
+    <div id="gva-overlay"></div>
+    <script defer>
+  document.querySelectorAll('.podpis').forEach(element => {
+    if (!element.textContent.trim()) {
+        element.style.display = 'none';
+    }
+});
+  </script>
+  </body>
+</html>
