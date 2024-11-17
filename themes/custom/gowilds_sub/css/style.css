@@ -171,6 +171,13 @@ article.node--type-zajecia {
     border-radius: 5px;
 }
 
+.wazny_komunikat {
+    font-size: 2rem;
+    font-weight: 700; 
+    padding: 0px 0px 10px 0px;
+    /*background-color:#00009f;*/
+}
+
 article p {
     font-size: 1.125rem;
     line-height: 30px;
@@ -247,13 +254,17 @@ div.frontpage img {
     margin-right: auto;
 }
 
-article.node--view-mode-full img,
-.node__content img {
+article.node--view-mode-full img {
     max-width: 90%;
     margin-left: auto;
     margin-right: auto;
     /* margin-bottom: 20px; */
 }
+.listing-one__single.teaser_1 .listing-one__image img {
+    width: 100% ;
+    max-width: 100%;
+}
+
 
 .item-image {
     margin-bottom: 0px;
@@ -1627,6 +1638,8 @@ a[href="/dk/dk_klub"]:hover .placowka-grid {
 .views-exposed-form .js-form-type-checkbox,
 .views-exposed-form .js-form-type-radio {
     display: flex;
+    align-items: center;
+    margin-bottom: 10px !important;
 }
 
 .views-exposed-form .js-form-type-checkbox input,
@@ -1636,6 +1649,7 @@ a[href="/dk/dk_klub"]:hover .placowka-grid {
 
 .views-exposed-form .form-item label {
     text-transform: unset;
+    line-height: 1rem;
 }
 
 
@@ -1984,7 +1998,37 @@ div.Zapisy_call1 .button-action>a {
 /* galeria zdjęć    */
 /* ------------------------------------------------------------------------------  */
 
+.owl-carousel .owl-stage {
+    display: flex;
+    align-items: center;
+}
 
+figure.image-fig figcaption {
+    display: none;
+}
+
+.owl-item.active figure.image-fig {
+    position: relative;  
+
+    img {
+        max-width: 100%;
+    }
+    figcaption {
+        color: #fff;
+        display: block;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        font-size: 0.9rem;
+        font-style: italic;
+        line-height: 1.1;
+        background: rgba(30,30,30,.5);
+        padding: 5px 5px 5px 5px;
+
+        
+    }
+
+}
 
 /* ------------------------------------------------------------------------------  */
 /* scroll-to-top    */

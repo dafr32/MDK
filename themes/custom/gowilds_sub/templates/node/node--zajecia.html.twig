@@ -48,16 +48,18 @@
 		<div class="listing-one__content minimumZajecia">  
 			<div class="listing-one__content-inner">
 				<div class="listing-one__content-top">
-					<div class="listing-one__preview">
-						{% if content.field_listing_gallery %}
-							<div class="gallery-popup">{{ content.field_listing_gallery }}</div>
-						{% endif %}  
-						{% if content.field_listing_video|render %}
-							<div class="listing-one__video">
-								<a class="popup-video" href="{{ conVideo|trim }}"><i class="icon la la-video-camera"></i></a>
-							</div>
-						{% endif %}
-					</div>
+					{% if content.field_galeria_zdjec_max_3|render or content.field_listing_video|render %}
+						<div class="listing-one__preview">
+							{% if content.field_galeria_zdjec_max_3|render|trim is not empty%}
+								<div class="gallery-popup">{{ content.field_galeria_zdjec_max_3 }}</div>
+							{% endif %}  
+							{% if content.field_listing_video|render %}
+								<div class="listing-one__video">
+									<a class="popup-video" href="{{ conVideo|trim }}"><i class="icon la la-video-camera"></i></a>
+								</div>
+							{% endif %}
+						</div>
+					{% endif %}
 					<div class="listing-one__category">{{ content.field_rodzaj_zajec }}</div>
 				</div>
 				<h3 class="listing-one__title"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h3>
@@ -98,7 +100,7 @@
                         <div class="listing-one__content-inner">
                             <div class="listing-one__content-top">
                                 <div class="listing-one__preview">
-                                    {% if content.field_listing_gallery %}
+                                    {% if content.field_listing_gallery is not empty %}
                                         <div class="gallery-popup">{{ content.field_listing_gallery }}</div>
                                     {% endif %}  
                                     {% if content.field_listing_video|render %}
@@ -246,11 +248,7 @@
 </div>
 <div class="row mb-5">
     <div class="col-md-12 d-flex justify-content-center">
-        {{ content.field_image }}
-			{% set alt = content.field_image.0['#item'].alt |raw %}
-			{% if content.field_image and alt != "foto" %}				
-				<small><i>{{ alt }}</i></small> 
-			{% endif %}
+        {{ content.field_image }}			
     </div>
 </div>
 <div class="row mb-4">
@@ -382,9 +380,9 @@
         {% if node.field_galeria_zdjec_max_3 is not empty %}
 			<div class="termin"><label>Galeria zdjęć</label></div>
 		{% endif %}
-		 <div class="pole_galeria mt-5 align-center">
-		{{ content.field_galeria_zdjec_max_3 }}
-		</div>
+		 	<div class="pole_galeria mt-5 align-center">
+				{{ content.field_galeria_zdjec_max_3 }}
+			</div>
     </div>
 </div>
 

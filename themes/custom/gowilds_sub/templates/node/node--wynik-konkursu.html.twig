@@ -1,0 +1,131 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+
+
+{% if view_mode == 'teaser' %}
+<!-- teaser mode -->
+{% set start_date = node.getCreatedTime() %}
+{% set formatted_date1 = start_date|date('j F Y')|replace({
+              'January': 'stycznia', 'February': 'lutego', 'March': 'marca', 'April': 'kwietnia',
+              'May': 'maja', 'June': 'czerwca', 'July': 'lipca', 'August': 'sierpnia',
+              'September': 'września', 'October': 'października', 'November': 'listopada',
+              'December': 'grudnia'
+            }) %}
+<div class="wyniki post-block teaser-2 my-4">
+    <div class="content-wrap">
+      <div class="post-content">
+          <div class="post-meta">            
+            <div class="content-inner d-flex">
+                <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div>
+                {# <div class="date" style="color: {{ kolor }}">{{ node.getCreatedTime()|date('U')|format_date('my_date') }}</div>       #}
+                {# <div class="date" style="color: {{ kolor }}">{{ formatted_date1 }}</div>               #}
+              {# <span class="post-author"><i class="fas fa-user-circle"></i>{{ author_name }}</span> #}
+              {# <span class="post-comment"><i class="fas fa-comments"></i>{{ comment_count }} {{ 'Comments'|t }}</span> #}
+            </div>
+          </div>
+          <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+          <div class="post">{{ content.field_wstep }}</div>   
+          <a class="read-more" style="color: {{ kolor }}" href="{{ url }}">
+            <span>{{ 'Czytaj więcej'|t }}</span>
+            <i class="las la-arrow-right"></i>
+          </a>      
+      </div>
+      <div class="post-image">
+        {{ content.field_image }}
+        {# <div class="post-created" style="background: {{kolor}}"> 
+          <span class="day">{{ node.getCreatedTime()|date("d") }}</span>
+          <span class="month">{{ node.getCreatedTime()|date("M") }}</span>
+        </div> #}
+      </div>
+    </div>
+</div>
+
+{% elseif view_mode == 'frontpage' %} 
+<div class="post-block teaser-2 frontpage">  
+  <div class="portfolio-one__single"> 
+    <div class="portfolio-one__images">
+        {{ content.field_image }}
+        <a class="portfolio-one__link" href="{{ url }}"></a>
+    </div>
+    <div class="post-content">
+      <div class="content-inner">
+        <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+        <div class="post">{{ content.field_wstep }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% elseif view_mode == 'email_html' %}
+
+<article class="event event-frontpage" style="overflow:auto" >      
+    <div style="float:left; max-width:40%; margin:20px">
+      {{ content.field_image}}
+    </div>
+    <div class="post-content">
+          <p style="margin-bottom:10px"><strong>Wyniki konkursów</strong><p>
+          <h3 class="post-title"> <a href="{{ url }}" rel="bookmark">{{ label }}</a> </h3>    
+          <div class="post">{{ content.field_wstep }}</div>   
+          <a class="read-more" style="color: {{ kolor }}" href="{{ url }}">
+            <span>{{ 'Czytaj więcej'|t }}</span>
+            <i class="las la-arrow-right"></i>
+          </a>      
+      </div>
+  
+</article>
+
+{% else %}
+<!-- article mode -->
+<article{{ attributes.addClass(classes)|without('about') }}>
+     <div class="post-block">    
+        {{ title_prefix }}
+            <h1{{ title_attributes.addClass('post-title') }}>{{ label }}</h1>
+        {{ title_suffix }}  
+        <div class="post-meta d-flex align-items-center justify-content-between">
+          {# <div class="post-categories">{{ content.field_rodzaj_ogloszenia }}</div> #}
+          {# <div class="post-author">
+            <i class="fas fa-calendar"></i>{{ node.getCreatedTime()|date('U')|format_date('my_date') }}
+          </div> #}
+          {# <div class="px-3">  {{ content.field_osrodek }} </div> #}
+        </div>  
+    </div>
+
+
+    <div class="post-thumbnail post-{{ post_format }} align-center">
+        {% if post_format == 'video' or post_format == 'audio' and gva_iframe %}
+        {{ gva_iframe|raw }}
+        {% elseif post_format == 'gallery' and content.field_post_gallery %}
+        {{ content.field_post_gallery }}
+        {% else %}
+        {{ content.field_image }}
+        {% endif %}  
+    </div>
+
+  <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+    {{ content |without('field_gallery_image', 'prevnext_previous', 'prevnext_next','field_image','field_rodzaj_ogloszenia', 'field_post_gallery', 'comment', 'field_zalaczniki', 'field_data_wydarzenia', 'field_czas_rozpoczecia', 'field_osrodek')}}
+  </div>
+
+    {% if node.field_zalaczniki and node.field_zalaczniki.value is not empty %}
+      <div class="attachments border-top">
+          <h5>Załączniki:</h5>
+          {{ content.field_zalaczniki }}
+      </div>
+    {% endif %}
+      {% if content.field_gallery_image is not empty %}
+  <div class="pole_galeria mt-5 align-center">
+      {{content.field_gallery_image}}
+  </div>
+
+{% endif %}
+</article>
+{% endif %}

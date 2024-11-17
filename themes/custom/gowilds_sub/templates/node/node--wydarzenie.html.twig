@@ -79,8 +79,10 @@
     <div class="col-sm-12 col-md-7">
       <div class="event-content d-flex flex-column h-100">
         <h2{{ title_attributes.addClass('node__title') }}>
+        
           <a href="{{ url }}" rel="bookmark">{{ label }}</a>
         </h2>
+        <span><a href="{{ url }}" rel="bookmark">Czytaj więcej <i class="las la-arrow-right"></i></a></span>
         <div class="event-teaser">
           {{ content.field_wstep }}
         </div>

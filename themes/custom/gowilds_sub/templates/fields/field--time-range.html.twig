@@ -66,9 +66,10 @@
   {% else %}
     {% for item in items %}
       <!-- czas zajec -->
-      {% set zakres = item.content["#markup"]|replace({' ': ''}) %}
+      {# {% set zakres = item.content["#markup"]|replace({' ': ''}) %} #}
       <div{{ attributes.addClass(classes, 'field__item') }}>        
-        {{ zakres }}
+        {# {{ zakres }} #}
+        {{ item.content }}
       </div>
     {% endfor %}
   {% endif %}

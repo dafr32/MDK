@@ -8,16 +8,10 @@ global-styling:
     js/main.js: {}
   dependencies:
     - core/jquery
-    - core/jquery.once
     - core/drupal    
     - core/once
     - core/drupalSettings
 
-mail:
-  version: VERSION
-  css:
-    theme:
-      css/mail.css: {}
 
 
 

@@ -7,33 +7,23 @@ use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Utility\UrlHelper;
 
 $theme_path = \Drupal::service('extension.list.theme')->getPath('gowilds_sub');
 include_once $theme_path . '/includes/menu.php';
 
 
 /**
- * Sprawdza, czy użytkownik jest zalogowany i czy ma rolę 'editor'.
- *
- * @return bool
- *   Zwraca TRUE, jeśli użytkownik jest zalogowany i ma rolę 'editor', FALSE w przeciwnym razie.
+ * Implements hook_preprocess_html() for node templates.
  */
-
-function check_user_role_editor() {
-  // Pobierz aktualnego użytkownika.
-  $current_user = \Drupal::currentUser();
-  // Sprawdź, czy użytkownik jest zalogowany.
-  if ($current_user->isAuthenticated()) {    
-    // Sprawdź, czy użytkownik ma rolę 'editor'.
-    return TRUE;
-  }
-  
-  // Jeśli użytkownik nie jest zalogowany, zwróć FALSE.
-  return FALSE;
+function gowilds_sub_preprocess_html(&$variables) {
+  $variables['#attached']['library'][] = 'gowilds_sub/gowilds_sub.skin.default';
 }
 
 
-
+/**
+ * Implements hook_preprocess_page() for node templates.
+ */
 function gowilds_sub_preprocess_page(&$variables) {
     
   // Sprawdź, czy aktualna strona to "/zajecia".
@@ -107,14 +97,6 @@ function gowilds_sub_preprocess_page(&$variables) {
 
 }
 
-
-function gowilds_sub_preprocess_html(&$variables) {
-  $variables['#attached']['library'][] = 'gowilds_sub/gowilds_sub.skin.default';
-}
-
-
-use Drupal\Core\Utility\UrlHelper;
-
 /**
  * Implements hook_preprocess_node() for node templates.
  */
@@ -139,6 +121,9 @@ function gowilds_sub_preprocess_node(&$variables) {
 }
 
 
+/**
+ * Implements hook_preprocess_node__kontakt() for node templates.
+ */
 function gowilds_sub_preprocess_node__kontakt(&$variables) {
   $node = $variables['node'];
   $listing_video = '';
@@ -202,17 +187,6 @@ function gowilds_sub_preprocess_node__zajecia(&$variables) {
 // }
 
 
-
-/**
- * Implements template_preprocess_HOOK() for block templates.
- */
-function gowilds_sub_preprocess_mimemail_message(array &$variables) {   
-    global $base_url; 
-    // Drupal::logger('form mail')->notice('current_display: ' . $form_id);    
-    $theme_path = \Drupal::service('extension.list.theme')->getPath('gowilds_sub');
-    $css_file_path = $base_url . '/' . $theme_path . '/css/mail.css';
-    $variables['css_file'] = file_get_contents($css_file_path);
-  }
 
 /**
  * Implements hook_form_alter().
@@ -283,19 +257,37 @@ function gowilds_sub_preprocess_taxonomy_term(&$variables) {
 }
 
 
-/** 
- * Implements template_preprocess_HOOK() for views-view.html.twig.
- */
 
-// Zmiana ilości elementów w widoku aktualności
-function gowilds_sub_preprocess_views_view(array &$variables) {  
-  //Drupal::logger('my_module')->notice('current_display: ' . $variables['view']->id() );
-  if ($variables['view']->id() == 'kalendarz' && $variables['display_id'] == 'all_events') {        
-    $variables['my_number_events'] = theme_get_setting('events_list_field'); 
+
+
+
+
+/**
+ * Sprawdza, czy użytkownik jest zalogowany i czy ma rolę 'editor'.
+ *
+ * @return bool
+ *   Zwraca TRUE, jeśli użytkownik jest zalogowany i ma rolę 'editor', FALSE w przeciwnym razie.
+ */
+function check_user_role_editor() {
+  // Pobierz aktualnego użytkownika.
+  $current_user = \Drupal::currentUser();
+  // Sprawdź, czy użytkownik jest zalogowany.
+  if ($current_user->isAuthenticated()) {    
+    // Sprawdź, czy użytkownik ma rolę 'editor'.
+    return TRUE;
   }
   
+  // Jeśli użytkownik nie jest zalogowany, zwróć FALSE.
+  return FALSE;
 }
 
 
-
-
+/** 
+ * Implements template_preprocess_HOOK() for views-view.html.twig.
+ */
+// Zmiana ilości elementów w widoku aktualności
+function gowilds_sub_preprocess_views_view(array &$variables) {    
+  if ($variables['view']->id() == 'kalendarz' && $variables['display_id'] == 'all_events') {        
+    $variables['my_number_events'] = theme_get_setting('events_list_field'); 
+  }  
+}
