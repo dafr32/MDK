@@ -5,7 +5,8 @@ calendar_events_library:
       css/base/calendar_events.css: {}
       css/base/pickmeup.css: {}
   js:
-    js/pickmeup.min.js: {}
+    # js/pickmeup.min.js: {}
+    js/pickmeup.js: {}
     js/pickmeup_langs.js: {}
     js/calendar_events.js: {}
   dependencies:
