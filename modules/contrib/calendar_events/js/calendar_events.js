@@ -116,12 +116,13 @@
 
     function fill_calendar(){
         $.each(global_events_json, function(){
-            var start_aux, end_aux, title, body, url;
+            var start_aux, end_aux, title, body, url, status;
             start_aux = $(this)[0].start.split("T");
             end_aux = ($(this)[0].end != null) ? $(this)[0].end.split("T") : [null,null];
             title = $(this)[0].title;
             body = $(this)[0].body;
             url  = $(this)[0].url;
+            status = $(this)[0].status;
             if(null != end_aux){
                 var continuos_days = split_days(start_aux[0], end_aux[0]);
                 for (var i in continuos_days){
@@ -135,6 +136,7 @@
                     array_dates_data[continuos_days[i]]['title'] = title;
                     array_dates_data[continuos_days[i]]['body'] = body;
                     array_dates_data[continuos_days[i]]['url'] = url;
+                    array_dates_data[continuos_days[i]]['status'] = status; // Dodanie statusu
                 }
             }
             if (Array.isArray(array_dates_data[start_aux[0]]) == false){
@@ -147,6 +149,7 @@
             array_dates_data[start_aux[0]]['title'] = title;
             array_dates_data[start_aux[0]]['body'] = body;
             array_dates_data[start_aux[0]]['url'] = url;
+            array_dates_data[start_aux[0]]['status'] = status;
         });
     }
 
@@ -189,8 +192,11 @@
                 var ev = eval(array_dates_data[date_calendar]);
                 var dt = '';
                 if(Array.isArray(ev)){
-                    dt = '__event_calendar events';                    
+                    dt = ev['status'] === 'Published' ? '__event_calendar events' : '__event_calendar events_plan';
+                    console.log("status:", ev['status']); // Debugowanie
+                    // dt = '__event_calendar events';                    
                 }
+
                 setCss();
                 return { class_name: 'data_' + date_calendar + dt }
                 },
@@ -225,9 +231,9 @@
             var data_day = array_dates_data[aux_class[0].split("data_")[1]];
             if(text_in_modal == 0){
                 return window.location.href=data_day['url'];
-            }
+            }            
             var dl = $('.dialog').dialog(opt).dialog("open");
-            dl.html(data_day['body']);
+            dl.html(data_day['title']);
             dl.append('<p>' + text_initial_date + ': ' + data_day['start'] + ' ' + text_initial_time + ': ' + data_day['start_time'] + '</p>');
             if(data_day['end'] != null)
                 dl.append('<p>' + text_end_date + ': ' + data_day['end'] + ' ' +  text_end_time + ': ' + data_day['end_time'] + '</p>');

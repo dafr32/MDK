@@ -7,12 +7,8 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
-
+use Drupal\Core\Path\PathAliasManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-
-
-
-
 
 
 /**
@@ -23,39 +19,35 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  * )
  */
 
-
-
 class CalendarEventsBlock extends BlockBase{
+  /**
+  * {@inheritdoc}
+  */
+  public function defaultConfiguration() {            
+      $message = 'Calendar Events Block';
+      // Drupal::logger('calendar_events::blockForm')->debug('<pre><code>' . print_r($message, TRUE) . '</code></pre>');
+      return [
+        'calendar_events' => [
+            'numCal'          => 1,
+            'bgColor'         => '#FFFFFF',
+            'bgColorEvent'    => '#00AAE4',
+            'bgColorSelected' => '',
+            'bgColorToday'    => '#FFFFFF',
+            'color'           => '#111111',
+            'colorEvent'      => '#20603D',
+            'colorOther'      => '#666666',
+            'colorMonth'      => '#000000',
+            'textInitialDate' => 'Initial date',
+            'textEndDate'     => 'End date',
+            'textInitialTime' => 'Initial time',
+            'textEndTime'     => 'End time',
+            'textInModal'     => 1,
+            'borderRadius'    => '70',
+        ]
+      ] + parent::defaultConfiguration();
 
 
-    /**
-    * {@inheritdoc}
-    */
-    public function defaultConfiguration() {            
-	      $message = 'Calendar Events Block';
-        // Drupal::logger('calendar_events::blockForm')->debug('<pre><code>' . print_r($message, TRUE) . '</code></pre>');
-        return [
-          'calendar_events' => [
-              'numCal'          => 1,
-              'bgColor'         => '#FFFFFF',
-              'bgColorEvent'    => '#00AAE4',
-              'bgColorSelected' => '',
-              'bgColorToday'    => '#FFFFFF',
-              'color'           => '#111111',
-              'colorEvent'      => '#20603D',
-              'colorOther'      => '#666666',
-              'colorMonth'      => '#000000',
-              'textInitialDate' => 'Initial date',
-              'textEndDate'     => 'End date',
-              'textInitialTime' => 'Initial time',
-              'textEndTime'     => 'End time',
-              'textInModal'     => 1,
-              'borderRadius'    => '70',
-          ]
-        ] + parent::defaultConfiguration();
-
-
-    }
+  }
 
   /**
    * {@inheritdoc }
@@ -118,7 +110,7 @@ class CalendarEventsBlock extends BlockBase{
     // Create the query to get published nodes of type 'wydarzenie'
     $query = $entityTypeManager->getStorage('node')->getQuery();
     $query->condition('type', 'wydarzenie')
-          ->condition('status', 1) // Status 1 means the node is published
+          // ->condition('status', 1) // Status 1 means the node is published
           ->accessCheck(TRUE);
     $nids = $query->execute();
     
@@ -131,14 +123,34 @@ class CalendarEventsBlock extends BlockBase{
 
     // Ustaw odpowiednią ścieżkę bazową w zależności od roli.    
     // $sc = $is_logged_in ? 'kalendarz' : 'kalendarz';    
-
+    
     // \Drupal::messenger()->addMessage('User logged in: ' . ($is_logged_in ? 'kalendarz' : 'kalendarz2'));
+    
+    // Pobierz bieżącą systemową ścieżkę
+    $current_path = \Drupal::service('path.current')->getPath();
+
+    // Przetłumacz na alias
+    $alias_manager = \Drupal::service('path_alias.manager');
+    $current_alias = $alias_manager->getAliasByPath($current_path);
+
+
+    // Sprawdź, czy alias kończy się na '/planer'
 
     foreach($nids as $nid){
-        $node = Node::load($nid);        
+        $node = Node::load($nid);  
+        // \Drupal::messenger()->addMessage('status'. $node->status->value);      
         $data = $node->field_event_start_date->value;		
         //$path = sprintf('/drupal_10/web/node/%d', $node->id());
-		    $path = sprintf('/kalendarz/%s', $data);
+		    // $path = sprintf('/kalendarz/%s', $data);
+        // $path = sprintf('/kalendarz?day=%s', $data);
+        if (strpos($current_alias, '/planer') !== false) {
+            // \Drupal::messenger()->addMessage('Alias kończy się na "/planer".');
+            $path_url = sprintf('/planer_day?day=%s', $data);
+        } else {
+            // \Drupal::messenger()->addMessage('Alias nie kończy się na "/planer".');
+              $path_url = sprintf('/kalendarz?day=%s', $data);
+        }
+        $path = $path_url;
         // $path = sprintf('/%s/%s',$sc, $data);
         $alias = $alias_manager->getAliasByPath($path);
         $url = $alias != null ? $alias : $path;
@@ -149,10 +161,13 @@ class CalendarEventsBlock extends BlockBase{
             'body' => $node->body->value,
             'start' => $node->field_event_start_date->value,
             'end' => $node->field_event_start_date->value,
+            'status' => $node->status->value ? 'Published' : 'Unpublished',            
             // 'end' => $node->field_event_end_date->value,
             // 'end' => !empty($node->field_event_end_date->value) ? $node->field_event_end_date->value : $node->field_event_start_date->value,
             //'only' => $node->field_only_day->value,
         ]);
+
+        
     }
     return json_encode($events);
    

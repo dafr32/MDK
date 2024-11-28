@@ -1,0 +1,45 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if title %}
+	<h3>{{ title }}</h3>
+{% endif %}
+
+<h3>{{ title }}</h3>
+
+<div class="view-content-wrap">
+	{% set i = 0 %}
+	{% for row in rows %}
+		{%
+       set row_classes = [
+         default_row_class ? 'item',
+       ]
+     %}
+		{% if i % 2 == 0  %}
+			{% set item_class = "item_one" %}
+		{% else %}
+			{% set item_class = "item_two" %}
+		{% endif %}
+
+		<div{{row.attributes.addClass(row_classes,item_class)}}>
+			{{ row.content }}
+		</div>
+		{% set i = i + 1 %}
+	{% endfor %}
+</div>

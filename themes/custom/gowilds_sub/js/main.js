@@ -248,29 +248,34 @@
 
 
       //zajęcia - po kliknięciu na placówke przenosi na kontakt danej placówki
-      document.getElementById('placowkaLabel').addEventListener('click', function() {
-        var link = document.querySelector('.dkKontaktMenuLink').getAttribute('href');
-        if (link) {
-          window.location.href = link;
-        }
-      });
+      var placowkaLabel = document.getElementById('placowkaLabel');
+      if (placowkaLabel) {
+        placowkaLabel.addEventListener('click', function() {
+          var link = document.querySelector('.dkKontaktMenuLink').getAttribute('href');
+          if (link) {
+            window.location.href = link;
+          }
+        });
+      }
+
+      
 
       
 
 
       //Wyszukiwanie w googlemapsach po kliknieciu na blok z klasą .searchGoogleMaps
-      function searchInGoogleMaps(searchQuery) {
-        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
-        window.open(googleMapsUrl, '_blank');
-    }
+    // function searchInGoogleMaps(searchQuery) {
+    //     const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+    //     window.open(googleMapsUrl, '_blank');
+    // }
     
-    const element = document.querySelector('.searchGoogleMaps');
+    // const element = document.querySelector('.searchGoogleMaps');
 
-    element.addEventListener('click', function() {
-      console.log("Test")
-        const text = "Bielsko-Biała " + document.querySelector('.gsc-heading__desc').innerText.trim();
-        searchInGoogleMaps(text);
-    });
+    // element.addEventListener('click', function() {
+    //   console.log("Test")
+    //     const text = "Bielsko-Biała " + document.querySelector('.gsc-heading__desc').innerText.trim();
+    //     searchInGoogleMaps(text);
+    // });
 
       
 

@@ -1,0 +1,294 @@
+/* ------------------------------------------------------------------------------  */
+/* KALENDARZ */
+/* widok */
+/* ------------------------------------------------------------------------------  */
+
+.news-calendar .pickmeup {
+    width: 100% !important;
+}
+
+.news-calendar .pickmeup .pmu-instance {
+    height: 10.8em !important;
+    text-align: center;
+    width: 100% !important;
+}
+
+
+.news-calendar .pickmeup .pmu-instance nav {
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.news-calendar nav.pmu-day-of-week {
+    display: none !important;
+}
+
+.news-calendar .events.pmu-button,
+.news-calendar .pmu-prev.pmu-button,
+.news-calendar .pmu-next.pmu-button {
+    cursor: pointer !important;
+}
+
+.news-calendar .pmu-month {
+    font-weight: 300 !important;
+    font-size: 4.5rem !important;
+}
+
+.news-calendar .pmu-days {
+    font-size: 1.4rem;
+}
+
+.news-calendar .pmu-days div {
+    /* margin-left: 1rem; */
+}
+
+.news-calendar .pmu-button {
+    height: 2.8rem;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 4px;
+    cursor: default !important;
+}
+
+/* kalendarz wydarzenia style*/
+.news-calendar .pickmeup .pmu-instance .pmu-days .events {
+    /* border-bottom: 4px solid red; */
+    /*background: #cacaca !important;*/
+    font-weight: 500 !important;
+    border-radius: 10px !important;
+    margin: 0 3px;
+}
+
+.events {
+    cursor: pointer !important;
+}
+
+
+.news-calendar .pickmeup .pmu-instance .pmu-today {
+    /* background: #c7c7c7 !important; */
+    margin: 0 3px;
+    color: black !important;
+    font-weight: 600;
+    text-decoration: underline !important;
+}
+
+.news-calendar .pickmeup .pmu-instance .pmu-selected {
+    /* border-bottom: 4px solid #000 !important;
+    background: #7bcbe9 !important; */
+    color: #eee;
+}
+
+.pmu-month.pmu-button,
+.pmu-prev.pmu-button,
+.pmu-next.pmu-button {
+    max-width: unset !important;
+}
+
+.news-calendar .pmu-month.pmu-button {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.news-calendar .pmu-days {
+    --bs-gutter-x: 3px;
+    --bs-gutter-y: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    overflow: auto;
+    margin-top: calc(var(--bs-gutter-y) * -1);
+    margin-right: calc(var(--bs-gutter-x) * -.5);
+    margin-left: calc(var(--bs-gutter-x) * -.5);
+
+}
+
+.news-calendar .pmu-not-in-month.pmu-button {
+    display: none !important;
+    -webkit-box-flex: unset;
+    -ms-flex: unset;
+    flex: unset;
+}
+
+.news-calendar .pmu-months,
+.news-calendar .pmu-years {
+    display: flex;
+}
+
+
+.news-calendar .pmu-days .pmu-button {
+    flex: 1;
+    min-width: 31px;
+}
+
+.news-calendar .pmu-days .pmu-sunday {
+    color: #b42626 !important;
+    font-weight: 700;
+}
+
+/* .pmu-days .pmu-selected {
+    font-weight: 900;
+} */
+
+.news-calendar .pickmeup .pmu-instance nav .pmu-prev,
+.news-calendar .pickmeup .pmu-instance nav .pmu-next {
+    height: 2em;
+    width: 10em !important;
+}
+
+.news-calendar .pickmeup .pmu-prev svg path {
+    transition: all 0.3s ease;
+    fill: black;
+}
+
+.news-calendar .pickmeup .pmu-instance .pmu-prev:hover svg path,
+.news-calendar .pickmeup .pmu-instance .pmu-next:hover svg path {
+    fill: red;
+}
+
+
+@media only screen and (max-width: 1200px) {
+
+    .news-calendar .pmu-days {
+        justify-content: flex-start;
+    }
+}
+
+@media only screen and (max-width: 650px) {
+    .news-calendar .pmu-button {
+        min-width: calc(100% / 11) !important;
+        width: calc(100% / 11) !important;
+        box-sizing: border-box;
+    }
+
+    .news-calendar .pickmeup .pmu-instance {
+        height: 12.8em !important;
+    }
+}
+
+
+@media screen and (max-width:1080px) {
+    .news-calendar .pmu-month {
+        font-weight: 300 !important;
+        font-size: 2rem !important;
+    }
+}
+
+.news-calendar .pmu-selected {
+    border-bottom: 0 !important;
+    background: 0 !important;
+    color: rgb(128, 128, 128) !important;
+
+}
+
+.news-calendar .prevNextButtons a,
+.news-calendar .prevNextButtons {
+    color: #929292 !important;
+}
+
+
+
+/* ------------------------------------------------------ */
+/* PLANER */
+/* ------------------------------------------------------ */
+
+.news-calendar-planer {
+    .events_plan {
+        background-color: #929292 !important;
+    }
+    .events {
+        color: #FFF !important;
+    }
+    .pmu-month.pmu-button {
+        font-weight: 600;
+    }
+}
+
+
+
+.planer {
+    border-bottom: 1px solid #999;    
+    margin-bottom: 10px;
+    .planer-data {
+        width: 150px;
+        display: flex;        
+        align-items: center;
+        justify-content: center;
+        .day { 
+            font-size: 3.5rem;
+            line-height: 3rem;
+            font-weight: 700;
+        }
+        .month {
+            font-size: 1rem;
+            line-height: 2rem;
+            font-weight: 700;
+        }
+    }
+    .planer-image {    max-width: 115px;    }
+    .planer-content {
+        height: auto;
+        width: 100%;
+        padding-left: 10px;
+        padding-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        .planer-title {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+    }
+    .content-inner {
+        display: flex;
+        justify-content: space-between;        
+        margin-top: auto;
+        .planer-daty {
+            padding-left: 15px;
+        }
+        .planer-osrodek {            
+            width: 300px;
+            display: flex;
+            flex-direction: column;            
+            justify-content: end;
+            padding-bottom: 5px;
+            .stan {
+                margin-left: auto;
+                color: #a70808;
+                font-weight: 600;
+                font-style: italic;
+                padding-bottom: 20px;
+            }
+            .osrodek {
+                position: relative;
+                font-size: 0.9rem;
+                padding: 8px 10px 8px 40px;
+            }
+        }
+    }
+
+    .field--name-field-osrodek {       
+        text-align: end;
+    }
+    .osrodek:before {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: -14px;
+        right: 258px;
+        height: 103%;
+        --bs-bg-opacity: 1;
+        background-color: #fff !important;
+        -moz-transform: skew(30deg, 0deg);
+        -webkit-transform: skew(30deg, 0deg);
+        -o-transform: skew(30deg, 0deg);
+        -ms-transform: skew(30deg, 0deg);
+        transform: skew(40deg, 0deg);
+    }
+}
+
+.planer.unpublished {
+    background-color: #eee;
+}

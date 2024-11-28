@@ -23,6 +23,13 @@
     --post-title-size: 2rem;
 }
 
+.messages.messages--status {
+    color: #fff;
+}
+.container-xxl {
+    max-width: 1620px;
+}
+
 .text-dark {
     color: #222 !important
 }
@@ -139,6 +146,12 @@ ol {
 
 ul.gva_menu {
     list-style-type: none;
+}
+
+
+.gva_menu_main .menu-item svg {
+    width: 2rem;
+    height: 2rem;
 }
 
 .text-right {
@@ -2988,16 +3001,7 @@ input#edit-keys, input#edit-keys--2{
 #placowkaLabel:hover{
     cursor: pointer;
 }
-.pmu-month{
-    font-weight: 300 !important;
-    font-size: 4.5rem !important;
-}
-.pmu-days{
-    font-size: 1.4rem;
-}
-.pmu-days div {
-    /* margin-left: 1rem; */
-}
+
 article .information a{
     color: black !important;
     font-weight: 300;
@@ -3029,188 +3033,7 @@ min-height: 400px;
 }
 
 
-/* ------------------------------------------------------------------------------  */
-/* KALENDARZ */
-/* widok */
-/* ------------------------------------------------------------------------------  */
 
-.pickmeup {
-    width: 100% !important;
-}
-
-.pickmeup .pmu-instance {
-    height: 10.8em !important;
-    text-align: center;
-    width: 100% !important;
-}
-
-
-.pickmeup .pmu-instance nav {
-    justify-content: center;
-}
-
-nav.pmu-day-of-week {
-    display: none !important;
-}
-
-.pmu-instance nav {
-    margin-bottom: 30px;
-}
-
-.pmu-button {
-    /* -webkit-box-flex: 1;
-    -ms-flex: 1 0 0%;
-    flex: 1 0 0%; */
-    /* min-width: calc(100% / 31) !important;
-    width: calc(100% / 31) !important; */
-    height: 2.8rem;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 4px;
-    cursor: default !important;
-}
-
-.events.pmu-button {
-    /* padding-bottom: 0; */
-}
-
-/* kalendarz wydarzenia style*/
-.pickmeup .pmu-instance .pmu-days .events {
-    /* border-bottom: 4px solid red; */
-    /*background: #cacaca !important;*/
-    font-weight: 500 !important;
-    border-radius: 10px !important;
-    margin: 0 3px;
-}
-.events{
-    cursor: pointer !important;
-}
-
-
-.pickmeup .pmu-instance .pmu-today {
-    /* background: #c7c7c7 !important; */
-    margin: 0 3px;
-    color: black !important;
-    font-weight: 600;
-    text-decoration: underline !important;
-}
-
-.pickmeup .pmu-instance .pmu-selected {
-    /* border-bottom: 4px solid #000 !important;
-    background: #7bcbe9 !important; */
-    color: #eee;
-}
-
-.pmu-month.pmu-button,
-.pmu-prev.pmu-button,
-.pmu-next.pmu-button {
-    max-width: unset !important;
-}
-
-.pmu-month.pmu-button {
-    font-size: 2.5rem;
-    font-weight: 700;
-}
-
-.pmu-days {
-    --bs-gutter-x: 3px;
-    --bs-gutter-y: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    justify-content: center;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    overflow: auto;
-    margin-top: calc(var(--bs-gutter-y) * -1);
-    margin-right: calc(var(--bs-gutter-x) * -.5);
-    margin-left: calc(var(--bs-gutter-x) * -.5);
-
-}
-
-
-.pmu-not-in-month.pmu-button {
-    display: none !important;
-    -webkit-box-flex: unset;
-    -ms-flex: unset;
-    flex: unset;
-}
-
-.pmu-months,
-.pmu-years {
-    display: flex;
-}
-
-
-@media only screen and (max-width: 1200px) {
-    .pmu-button {
-        width: 30px !important;
-    }
-
-    .pmu-days {
-        justify-content: flex-start;
-    }
-}
-
-@media only screen and (max-width: 650px) {
-    .pmu-button {
-        min-width: calc(100% / 11) !important;
-        width: calc(100% / 11) !important;
-        box-sizing: border-box;
-    }
-
-    .pickmeup .pmu-instance {
-        height: 12.8em !important;
-    }
-}
-
-
-
-.pmu-days .pmu-button {
-    flex: 1;
-    min-width: 28px;
-}
-
-.pmu-days .pmu-sunday {    
-    color: #b42626 !important;
-    font-weight: 700;
-}
-
-/* .pmu-days .pmu-selected {
-    font-weight: 900;
-} */
-
-.pickmeup .pmu-instance nav .pmu-prev,
-.pickmeup .pmu-instance nav .pmu-next {
-    height: 2em;
-    width: 10em !important;
-}
-
-#block-gowilds-sub-eventscalendarblock nav .pmu-prev svg path {
-    color: #000;
-}
-
-@media screen and (max-width:1080px) {
-    .pmu-month {
-        font-weight: 300 !important;
-        font-size: 2rem !important;
-    }
-}
-
-.pmu-instance nav {
-    margin-bottom: 4vh;
-}
-
-.pmu-selected {
-    border-bottom: 0 !important;
-    background: 0 !important;
-    color: rgb(128, 128, 128) !important;
-    
-}
-.prevNextButtons a, .prevNextButtons{
-    color: #929292 !important;
-}
 .iconbox-six__desc .field__item {
     margin-bottom: -5px;
   }
